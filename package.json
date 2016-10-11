@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-	"test-ci": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --reporter spec --check-leaks test/"
+    "test-ci": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --reporter spec --check-leaks test/"
   },
   "repository": {
     "type": "git",
@@ -25,6 +25,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "express": "^4.14.0",
+    "istanbul": "^0.4.5",
     "mocha": "^3.1.2",
     "supertest": "^2.0.0"
   },
@@ -33,6 +34,6 @@
     "lodash": "^4.16.4"
   },
   "engines": {
-    "node": ">= 4.0.0"
+    "node": ">= 4.4.0"
   }
 }
