@@ -94,10 +94,22 @@ describe('lmc-api-util - make() functions', function() {
 	describe('makeFound()', function() {
 		before(function() {
 			app.get('/found', function(req, res) {
-				api.makeFound(res, 'Thing 123', {stuff: 'junk'});
+				if(req.query.type === 'object') {
+					api.makeFound(res, 'Thing 123', {thing: {stuff: 'junk'}});
+				} else if(req.query.type === 'array') {
+					api.makeFound(res, 'Thing 123', {
+						things: [
+							{id: 1},
+							{id: 2},
+							{id: 3}
+						]
+					});
+				} else {
+					api.makeFound(res, 'Thing 123', {thing: 'junk'});
+				}
 			});
 		});
-		it('should return OK with "Found" message', function(done) {
+		it('should return OK with "Found" message and extra params', function(done) {
 			request(app)
 				.get('/found')
 				.set('Accept', 'application/json')
@@ -106,7 +118,38 @@ describe('lmc-api-util - make() functions', function() {
 					expect(err).to.be.null;
 					expect(res.body.result).to.equal('OK');
 					expect(res.body.message).to.equal('Found Thing 123');
-					expect(res.body.stuff).to.equal('junk');
+					expect(res.body.thing).to.equal('junk');
+					done();
+				});
+		});
+		it('should return OK with "Found" message and deep object', function(done) {
+			request(app)
+				.get('/found?type=object')
+				.set('Accept', 'application/json')
+				.expect(HttpStatus.OK)
+				.end(function(err, res) {
+					expect(err).to.be.null;
+					expect(res.body.result).to.equal('OK');
+					expect(res.body.message).to.equal('Found Thing 123');
+					expect(res.body.thing).to.be.an('object');
+					expect(res.body.thing.stuff).to.equal('junk');
+					done();
+				});
+		});
+		it('should return OK with "Found" message and array of objects', function(done) {
+			request(app)
+				.get('/found?type=array')
+				.set('Accept', 'application/json')
+				.expect(HttpStatus.OK)
+				.end(function(err, res) {
+					expect(err).to.be.null;
+					expect(res.body.result).to.equal('OK');
+					expect(res.body.message).to.equal('Found Thing 123');
+					expect(res.body.things).to.be.an('array');
+					expect(res.body.things).to.have.length(3);
+					expect(res.body.things[0].id).to.equal(1);
+					expect(res.body.things[1].id).to.equal(2);
+					expect(res.body.things[2].id).to.equal(3);
 					done();
 				});
 		});
