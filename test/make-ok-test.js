@@ -24,6 +24,8 @@ describe('lmc-api-util - makeOk() and children', function() {
 			app.get('/ok', function(req, res) {
 				if(req.query.resultobj) {
 					api.makeOk(res, 'OK result with object', {foo: 'bar'});
+				} else if(req.query.nomessage) {
+					api.makeOk(res);
 				} else {
 					api.makeOk(res, 'OK result');
 				}
@@ -38,6 +40,18 @@ describe('lmc-api-util - makeOk() and children', function() {
 					expect(err).to.be.null;
 					expect(res.body.result).to.equal('OK');
 					expect(res.body.message).to.equal('OK result');
+					done();
+				});
+		});
+		it('should return OK result with no message', function(done) {
+			request(app)
+				.get('/ok?nomessage=true')
+				.set('Accept', 'application/json')
+				.expect(HttpStatus.OK)
+				.end(function(err, res) {
+					expect(err).to.be.null;
+					expect(res.body.result).to.equal('OK');
+					expect(res.body.message).to.be.undefined;
 					done();
 				});
 		});

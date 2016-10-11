@@ -24,6 +24,8 @@ describe('lmc-api-util - makeFail() and children', function() {
 			app.get('/fail', function(req, res) {
 				if(req.query.resultobj) {
 					api.makeFail(res, 'FAIL result with object', {foo: 'bar'});
+				} else if(req.query.nomessage) {
+					api.makeFail(res);
 				} else {
 					api.makeFail(res, 'FAIL result');
 				}
@@ -38,6 +40,18 @@ describe('lmc-api-util - makeFail() and children', function() {
 					expect(err).to.be.null;
 					expect(res.body.result).to.equal('FAIL');
 					expect(res.body.message).to.equal('FAIL result');
+					done();
+				});
+		});
+		it('should return FAIL result with no message', function(done) {
+			request(app)
+				.get('/fail?nomessage=true')
+				.set('Accept', 'application/json')
+				.expect(HttpStatus.OK)
+				.end(function(err, res) {
+					expect(err).to.be.null;
+					expect(res.body.result).to.equal('FAIL');
+					expect(res.body.message).to.be.undefined;
 					done();
 				});
 		});
