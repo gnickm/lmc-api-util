@@ -9,41 +9,46 @@ const HttpStatus = require('http-status-codes');
 
 // --------------------------------------------------------------------------
 
-var makeOkResult = function(res, msg, resultObj) {
+var makeOk = function(res, msg, resultObj) {
 	res.json(_.assignIn({
 		result: 'OK',
 		message: msg
 	}, resultObj));
 };
 
-var makeFailResult = function(res, msg, resultObj) {
+var makeFail = function(res, msg, resultObj) {
 	res.json(_.assignIn({
 		result: 'FAIL',
 		message: msg
 	}, resultObj));
 };
 
-var makeInvalidRequestResult = function(res, msg) {
+var makeBadRequest = function(res, msg) {
 	// Return 400 - Bad Request
 	res.status(HttpStatus.BAD_REQUEST);
-	makeFailResult(msg);
+	makeFail(res, msg);
 };
 
-var checkRequiredFields = function(res, obj, fields) {
-    var passed = true;
+var checkRequired = function(res, params, required) {
+	var missing = [];
 
-    _.forEach(fields, function(field) {
-		if(!_.has(obj, field)) {
-			makeInvalidRequestResult(res, 'Missing required field: ' + field);
-			passed = false;
+    _.forEach(required, function(requiredParam) {
+		if(!_.has(params, requiredParam)) {
+			missing.push(requiredParam);
 		}
 	});
+	
+	if(missing.length === 1) {
+		makeBadRequest(res, 'Missing required parameter: ' + missing[0]);
+	} else if(missing.length > 1) {
+		makeBadRequest(res, 'Missing required parameters: ' + _.join(missing, ','));
+	}
 
-	return passed;
+	return missing.length === 0;
 };
 
-module.exports.makeOkResult = makeOkResult;
-module.exports.makeFailResult = makeFailResult;
-module.exports.makeInvalidRequestResult = makeInvalidRequestResult;
-module.exports.checkRequiredFields = checkRequiredFields;
+module.exports.makeOk = makeOk;
+module.exports.makeFail = makeFail;
+module.exports.makeBadRequest = makeBadRequest;
+module.exports.checkRequired = checkRequired;
 
