@@ -1,0 +1,32 @@
+{
+  "name": "lmc-api-util",
+  "version": "1.0.0",
+  "description": "Stateless helper functions for implementing RESTful APIs",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gnickm/lmc-api-util.git"
+  },
+  "keywords": [
+    "rest",
+    "restful",
+    "api"
+  ],
+  "author": "Nick Mitchell",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gnickm/lmc-api-util/issues"
+  },
+  "homepage": "https://github.com/gnickm/lmc-api-util#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.1.2"
+  },
+  "dependencies": {
+    "http-status-codes": "^1.0.6",
+    "lodash": "^4.16.4"
+  }
+}
