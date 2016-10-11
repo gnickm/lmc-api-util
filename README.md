@@ -17,27 +17,19 @@ app.get('/api/ok', function(req, res) {
 });
 
 // Call to /api/thing/found returns status 200 OK and JSON: 
-//     {"result":"OK","message":"I found your thing!","thing":{"foo":"bar"}} 
+//     {"result":"OK","message":"Found Thing 123","thing":{"foo":"bar"}} 
 
 app.get('/api/thing/found', function(req, res) {
-	api.makeFound(res, 'I found your thing!', {thing: {foo: 'bar'}});
+	api.makeFound(res, 'Thing 123', {thing: {foo: 'bar'}});
 });
 
 // Call to /api/thing/notfound returns status 404 Not Found and JSON: 
-//     {"result":"FAIL","message":"I lost your thing, sorry."} 
+//     {"result":"FAIL","message":"Could not find Thing 456"} 
 
 app.get('/api/thing/notfound', function(req, res) {
-	api.makeNotFound(res, 'I lost your thing, sorry.');
+	api.makeNotFound(res, 'Thing 456');
 });
 
-// Call to /api/check returns status 200 OK if required parameters foo and bar 
-// are present and 400 Bad Request if they are not
-
-app.get('/api/check', function(req, res) {
-	if(api.checkRequired(res, req.query, ['foo', 'bar'])) {
-		api.makeOk(res, 'Parameters OK');
-	}
-});
 ```
 ## Installation
 
@@ -175,6 +167,27 @@ missing parameters in message if all the required paramaters are not present.
 simply pass `req.query`
 - `required` (required) - array of parameter names to check
 
+Example:
+
+```javascript
+const express = require('express');
+const api = require('lmc-api-util');
+
+var app = express();
+
+// Call /api/check?foo=1&bar=2 returns status 200 OK and JSON:
+//     {"result":"OK","message":"You called OK"} 
+// Call /api/check?bar=2 returns status 400 Bad Request and JSON:
+//     {"result":"FAIL","message":"Missing required parameter: foo"} 
+// Call /api/check returns status 400 Bad Request and JSON:
+//     {"result":"FAIL","message":"Missing required parameters: foo, bar"} 
+
+app.get('/api/check', function(req, res) {
+	if(api.checkRequired(res, req.query, ['foo', 'bar'])) {
+		api.makeOk(res, 'Parameters OK');
+	}
+});
+```
 ## License
 
 [MIT](LICENSE)
