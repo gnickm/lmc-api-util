@@ -4,7 +4,8 @@
   "description": "Stateless helper functions for implementing RESTful APIs",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+	"test-ci": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --reporter spec --check-leaks test/"
   },
   "repository": {
     "type": "git",
@@ -30,5 +31,8 @@
   "dependencies": {
     "http-status-codes": "^1.0.6",
     "lodash": "^4.16.4"
+  },
+  "engines": {
+    "node": ">= 4.0.0"
   }
 }

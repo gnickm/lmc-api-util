@@ -23,9 +23,59 @@ var makeFail = function(res, msg, resultObj) {
 	}, resultObj));
 };
 
+var makeFound = function(res, itemDesc, resultObj) {
+	// Return 200 - OK
+	res.status(HttpStatus.OK);
+	makeOk(res, 'Found ' + itemDesc, resultObj);
+};
+
+var makeFoundZero = function(res, itemDesc, resultObj) {
+	// Return 200 - OK
+	// NOTE: 204 is not valid here, since we're actually returning
+	// content within the message response.
+	res.status(HttpStatus.OK);
+	makeOk(res, 'Found zero ' + itemDesc, resultObj);
+};
+
+var makeCreated = function(res, itemDesc, resultObj) {
+	// Return 201 - Created
+	res.status(HttpStatus.CREATED);
+	if(_.has(resultObj, 'location')) {
+		res.location(resultObj.location);
+	}
+	makeOk(res, 'Created new ' + itemDesc, resultObj);
+};
+
+var makeUpdated = function(res, itemDesc, resultObj) {
+	// Return 200 - OK
+	res.status(HttpStatus.OK);
+	if(_.has(resultObj, 'location')) {
+		res.location(resultObj.location);
+	}
+	makeOk(res, 'Updated ' + itemDesc, resultObj);
+};
+
+var makeDeleted = function(res, itemDesc, resultObj) {
+	// Return 200 - OK
+	res.status(HttpStatus.OK);
+	makeOk(res, 'Deleted ' + itemDesc, resultObj);
+};
+
+var makeNotFound = function(res, itemDesc) {
+	// Return 404 - Not Found
+	res.status(HttpStatus.NOT_FOUND);
+	makeFail(res, 'Could not find ' + itemDesc);
+};
+
 var makeBadRequest = function(res, msg) {
 	// Return 400 - Bad Request
 	res.status(HttpStatus.BAD_REQUEST);
+	makeFail(res, msg);
+};
+
+var makeServerError = function(res, msg) {
+	// Return 500 - Internal Server Error
+	res.status(HttpStatus.INTERNAL_SERVER_ERROR);
 	makeFail(res, msg);
 };
 
@@ -49,6 +99,13 @@ var checkRequired = function(res, params, required) {
 
 module.exports.makeOk = makeOk;
 module.exports.makeFail = makeFail;
+module.exports.makeFound = makeFound;
+module.exports.makeFoundZero = makeFoundZero;
+module.exports.makeCreated = makeCreated;
+module.exports.makeUpdated = makeUpdated;
+module.exports.makeDeleted = makeDeleted;
+module.exports.makeNotFound = makeNotFound;
 module.exports.makeBadRequest = makeBadRequest;
+module.exports.makeServerError = makeServerError;
 module.exports.checkRequired = checkRequired;
 
