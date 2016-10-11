@@ -23,7 +23,9 @@
   "homepage": "https://github.com/gnickm/lmc-api-util#readme",
   "devDependencies": {
     "chai": "^3.5.0",
-    "mocha": "^3.1.2"
+    "express": "^4.14.0",
+    "mocha": "^3.1.2",
+    "supertest": "^2.0.0"
   },
   "dependencies": {
     "http-status-codes": "^1.0.6",
