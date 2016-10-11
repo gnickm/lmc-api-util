@@ -1,6 +1,6 @@
 {
   "name": "lmc-api-util",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Stateless helper functions for implementing RESTful APIs in express",
   "main": "index.js",
   "scripts": {
