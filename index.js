@@ -91,7 +91,7 @@ var checkRequired = function(res, params, required) {
 	if(missing.length === 1) {
 		makeBadRequest(res, 'Missing required parameter: ' + missing[0]);
 	} else if(missing.length > 1) {
-		makeBadRequest(res, 'Missing required parameters: ' + _.join(missing, ','));
+		makeBadRequest(res, 'Missing required parameters: ' + _.join(missing, ', '));
 	}
 
 	return missing.length === 0;
