@@ -1,7 +1,7 @@
 {
   "name": "lmc-api-util",
   "version": "1.0.0",
-  "description": "Stateless helper functions for implementing RESTful APIs",
+  "description": "Stateless helper functions for implementing RESTful APIs in express",
   "main": "index.js",
   "scripts": {
     "test": "mocha",
@@ -14,7 +14,8 @@
   "keywords": [
     "rest",
     "restful",
-    "api"
+    "api",
+	"status"
   ],
   "author": "Nick Mitchell",
   "license": "MIT",
