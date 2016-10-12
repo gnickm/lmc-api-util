@@ -176,7 +176,7 @@ const api = require('lmc-api-util');
 var app = express();
 
 // Call /api/check?foo=1&bar=2 returns status 200 OK and JSON:
-//     {"result":"OK","message":"You called OK"} 
+//     {"result":"OK","message":"Parameters OK"} 
 // Call /api/check?bar=2 returns status 400 Bad Request and JSON:
 //     {"result":"FAIL","message":"Missing required parameter: foo"} 
 // Call /api/check returns status 400 Bad Request and JSON:
