@@ -67,10 +67,10 @@ var makeBadRequest = function(res, msg) {
 	makeFail(res, msg);
 };
 
-var makeForbidden = function(res, msg) {
+var makeForbidden = function(res, itemDesc) {
 	// Return 403 - Forbidden
 	res.status(HttpStatus.FORBIDDEN);
-	makeFail(res, msg);
+	makeFail(res, 'Not authorized to access ' + itemDesc);
 };
 
 var makeNotFound = function(res, itemDesc) {

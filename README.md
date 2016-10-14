@@ -126,15 +126,6 @@ Creates a response JSON message with `result` of OK and creates a message that
 the response. 
 
 ---
-### makeNotFound(res, itemDesc)
-
-Creates a response JSON message with `result` of FAIL and creates a message that
-`itemDesc` was not found. HTTP status is set to 404 Not Found.
-
-- `res` (required) - express response object
-- `itemDesc` (optional) - description of what was not found
-
----
 ### makeBadRequest(res, message)
 
 Creates a response JSON message with `result` of FAIL and a supplied `message`.
@@ -143,6 +134,24 @@ malformed information in the request.
 
 - `res` (required) - express response object
 - `message` (optional) - message returned with the response
+
+---
+### makeForbidden(res, itemDesc)
+
+Creates a response JSON message with `result` of FAIL and creates a message that
+`itemDesc` cannot be accessed. HTTP status is set to 403 Forbidden.
+
+- `res` (required) - express response object
+- `itemDesc` (optional) - description of what was attempted to be accessed
+
+---
+### makeNotFound(res, itemDesc)
+
+Creates a response JSON message with `result` of FAIL and creates a message that
+`itemDesc` was not found. HTTP status is set to 404 Not Found.
+
+- `res` (required) - express response object
+- `itemDesc` (optional) - description of what was not found
 
 ---
 ### makeServerError(res, message)

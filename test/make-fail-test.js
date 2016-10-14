@@ -110,7 +110,7 @@ describe('lmc-api-util - makeFail() and children', function() {
 	describe('makeForbidden()', function() {
 		before(function() {
 			app.get('/forbid', function(req, res) {
-				api.makeForbidden(res, 'Not authorized to access');
+				api.makeForbidden(res, 'Thing 123');
 			});
 		});
 		it('should return Forbidden (403) status with FAIL result', function(done) {
@@ -121,7 +121,7 @@ describe('lmc-api-util - makeFail() and children', function() {
 				.end(function(err, res) {
 					expect(err).to.be.null;
 					expect(res.body.result).to.equal('FAIL');
-					expect(res.body.message).to.equal('Not authorized to access');
+					expect(res.body.message).to.equal('Not authorized to access Thing 123');
 					done();
 				});
 		});
