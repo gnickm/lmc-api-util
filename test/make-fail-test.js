@@ -107,6 +107,25 @@ describe('lmc-api-util - makeFail() and children', function() {
 				});
 		});
 	});
+	describe('makeForbidden()', function() {
+		before(function() {
+			app.get('/forbid', function(req, res) {
+				api.makeForbidden(res, 'Not authorized to access');
+			});
+		});
+		it('should return Forbidden (403) status with FAIL result', function(done) {
+			request(app)
+				.get('/forbid')
+				.set('Accept', 'application/json')
+				.expect(HttpStatus.FORBIDDEN)
+				.end(function(err, res) {
+					expect(err).to.be.null;
+					expect(res.body.result).to.equal('FAIL');
+					expect(res.body.message).to.equal('Not authorized to access');
+					done();
+				});
+		});
+	});
 	describe('makeServerError()', function() {
 		before(function() {
 			app.get('/servererror', function(req, res) {

@@ -61,16 +61,22 @@ var makeDeleted = function(res, itemDesc, resultObj) {
 	makeOk(res, 'Deleted ' + itemDesc, resultObj);
 };
 
-var makeNotFound = function(res, itemDesc) {
-	// Return 404 - Not Found
-	res.status(HttpStatus.NOT_FOUND);
-	makeFail(res, 'Could not find ' + itemDesc);
-};
-
 var makeBadRequest = function(res, msg) {
 	// Return 400 - Bad Request
 	res.status(HttpStatus.BAD_REQUEST);
 	makeFail(res, msg);
+};
+
+var makeForbidden = function(res, msg) {
+	// Return 403 - Forbidden
+	res.status(HttpStatus.FORBIDDEN);
+	makeFail(res, msg);
+};
+
+var makeNotFound = function(res, itemDesc) {
+	// Return 404 - Not Found
+	res.status(HttpStatus.NOT_FOUND);
+	makeFail(res, 'Could not find ' + itemDesc);
 };
 
 var makeServerError = function(res, msg) {
@@ -104,8 +110,9 @@ module.exports.makeFoundZero = makeFoundZero;
 module.exports.makeCreated = makeCreated;
 module.exports.makeUpdated = makeUpdated;
 module.exports.makeDeleted = makeDeleted;
-module.exports.makeNotFound = makeNotFound;
 module.exports.makeBadRequest = makeBadRequest;
+module.exports.makeForbidden = makeForbidden;
+module.exports.makeNotFound = makeNotFound;
 module.exports.makeServerError = makeServerError;
 module.exports.checkRequired = checkRequired;
 
