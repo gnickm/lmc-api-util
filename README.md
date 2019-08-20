@@ -13,21 +13,21 @@ var app = express();
 //     {"result":"OK","message":"You called OK"} 
 
 app.get('/api/ok', function(req, res) {
-	api.makeOk(res, 'You called OK');
+    api.makeOk(res, 'You called OK');
 });
 
 // Call to /api/thing/found returns status 200 OK and JSON: 
 //     {"result":"OK","message":"Found Thing 123","thing":{"foo":"bar"}} 
 
 app.get('/api/thing/found', function(req, res) {
-	api.makeFound(res, 'Thing 123', {thing: {foo: 'bar'}});
+    api.makeFound(res, 'Thing 123', {thing: {foo: 'bar'}});
 });
 
 // Call to /api/thing/notfound returns status 404 Not Found and JSON: 
 //     {"result":"FAIL","message":"Could not find Thing 456"} 
 
 app.get('/api/thing/notfound', function(req, res) {
-	api.makeNotFound(res, 'Thing 456');
+    api.makeNotFound(res, 'Thing 456');
 });
 
 ```
@@ -192,9 +192,52 @@ var app = express();
 //     {"result":"FAIL","message":"Missing required parameters: foo, bar"} 
 
 app.get('/api/check', function(req, res) {
-	if(api.checkRequired(res, req.query, ['foo', 'bar'])) {
-		api.makeOk(res, 'Parameters OK');
-	}
+    if(api.checkRequired(res, req.query, ['foo', 'bar'])) {
+        api.makeOk(res, 'Parameters OK');
+    }
+});
+```
+
+---
+### calcPaging(params, options)
+
+Generates a well-defined object that can be used for paging when looking up
+data. Handles omitted parameters and calculates offset and limit values.
+
+- `params` (required) - array or object of provided parameters. Usually can
+simply pass `req.query`. Recognized values are:
+   - `page` - current page. Defaults to 1
+   - `pageSize` - numer of objects per page. Defaults to 50, but is limited by `maxPageSize` below
+- `options` (optional) - other options for paging:
+   - `maxPageSize` - maximum requestable page size. Defaults to 200
+
+Return a single object with the following values:
+
+- `page` - current page of data
+- `pageSize` - number of objects per page
+- `offset` - number of objects to skipped to get to page of data
+- `limit` - same as `pageSize`
+
+Example:
+
+```javascript
+const express = require('express');
+const api = require('lmc-api-util');
+
+var app = express();
+
+// Call /api/paging returns:
+//     {"result":"OK","message":"Paging!","page":1,"pageSize":50,"offset":0,"limit":50} 
+// Call /api/paging?page=3 returns:
+//     {"result":"OK","message":"Paging!","page":3,"pageSize":50,"offset":100,"limit":50} 
+// Call /api/paging?page=4&pageSize=100 returns:
+//     {"result":"OK","message":"Paging!","page":4,"pageSize":100,"offset":300,"limit":100} 
+// Call /api/paging?page=5&pageSize=999 returns:
+//     {"result":"OK","message":"Paging!","page":4,"pageSize":200,"offset":400,"limit":200} 
+
+app.get('/api/paging', function(req, res) {
+    const paging = api.calcPaging(req.query);
+    api.makeOk(res, 'Parameters OK', paging);
 });
 ```
 ## License
