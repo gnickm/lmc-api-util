@@ -19,6 +19,7 @@ const makeOk = function(res, msg, resultObj) {
         message: msg
     }, resultObj));
 };
+
 const makeFail = function(res, msg, resultObj) {
     res.json(_.assignIn({
         result: 'FAIL',
@@ -67,6 +68,12 @@ const makeDeleted = function(res, itemDesc, resultObj) {
 const makeBadRequest = function(res, msg) {
     // Return 400 - Bad Request
     res.status(HttpStatus.BAD_REQUEST);
+    makeFail(res, msg);
+};
+
+const makeUnauthorized = function(res, msg) {
+    // Return 401 - Unauthorized
+    res.status(HttpStatus.UNAUTHORIZED);
     makeFail(res, msg);
 };
 
@@ -139,6 +146,7 @@ module.exports.makeCreated = makeCreated;
 module.exports.makeUpdated = makeUpdated;
 module.exports.makeDeleted = makeDeleted;
 module.exports.makeBadRequest = makeBadRequest;
+module.exports.makeUnauthorized = makeUnauthorized;
 module.exports.makeForbidden = makeForbidden;
 module.exports.makeNotFound = makeNotFound;
 module.exports.makeServerError = makeServerError;

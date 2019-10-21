@@ -136,10 +136,22 @@ malformed information in the request.
 - `message` (optional) - message returned with the response
 
 ---
+### makeUnauthorized(res, message)
+
+Creates a response JSON message with `result` of FAIL and a supplied message. HTTP 
+status is set to 401 Unauthorized. This is most useful for dealing with 
+authentication issues.
+
+- `res` (required) - express response object
+- `message` (optional) - message returned with the response
+
+---
 ### makeForbidden(res, itemDesc)
 
 Creates a response JSON message with `result` of FAIL and creates a message that
-`itemDesc` cannot be accessed. HTTP status is set to 403 Forbidden.
+`itemDesc` cannot be accessed by the current user. HTTP status is set to 403
+Forbidden. This is most useful for relaying to a user that they attempted to
+access something that they do not have permissions to access.
 
 - `res` (required) - express response object
 - `itemDesc` (optional) - description of what was attempted to be accessed
@@ -237,7 +249,7 @@ var app = express();
 
 app.get('/api/paging', function(req, res) {
     const paging = api.calcPaging(req.query);
-    api.makeOk(res, 'Parameters OK', paging);
+    api.makeOk(res, 'Paging!', paging);
 });
 ```
 ## License
