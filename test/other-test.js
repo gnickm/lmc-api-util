@@ -148,5 +148,29 @@ describe('lmc-api-util - other functions', function() {
 
             done();
         });
+        it('should convert strings to integers', function(done) {
+            const paging = api.calcPaging({
+                page: '2',
+                pageSize: '75'
+            });
+
+            expect(paging.page).to.equal(2);
+            expect(paging.pageSize).to.equal(75);
+            expect(paging.offset).to.equal(75);
+            expect(paging.limit).to.equal(75);
+
+            done();
+        });
+        it('should ignore bad string values', function(done) {
+            const paging = api.calcPaging({
+                page: 'foo',
+                pageSize: 'bar'
+            });
+
+            expect(paging.page).to.equal(1);
+            expect(paging.pageSize).to.equal(50);
+
+            done();
+        });
     });
 });
