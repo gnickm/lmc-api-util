@@ -223,7 +223,7 @@ simply pass `req.query`. Recognized values are:
 - `options` (optional) - other options for paging:
    - `maxPageSize` - maximum requestable page size. Defaults to 200
 
-Return a single object with the following values:
+Return a single object with the following values (all as integers):
 
 - `page` - current page of data
 - `pageSize` - number of objects per page

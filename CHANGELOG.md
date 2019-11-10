@@ -1,6 +1,11 @@
 # lmc-api-util Changelog
 
 ## 1.2.0
+> Released 9 Nov 2019
+
+- Fixed `calcPaging()` to return only integer values in paging object, even if passed in strings
+
+## 1.2.0
 > Released 21 Oct 2019
 
 - Added `calcPaging()` for generating paging

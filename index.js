@@ -120,15 +120,18 @@ const calcPaging = function(params, options) {
         page: 1
     });
 
+    paging.page = _.toSafeInteger(paging.page);
+    paging.pageSize = _.toSafeInteger(paging.pageSize);
+
     if(paging.pageSize > opts.maxPageSize) {
         paging.pageSize = opts.maxPageSize;
     }
 
-    if(paging.pageSize < 1) {
+    if(paging.pageSize === false || paging.pageSize < 1) {
         paging.pageSize = DEFAULT_PAGE_SIZE;
     }
 
-    if(paging.page < 1) {
+    if(paging.page === false || paging.page < 1) {
         paging.page = 1;
     }
 
