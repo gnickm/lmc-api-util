@@ -172,5 +172,35 @@ describe('lmc-api-util - other functions', function() {
 
             done();
         });
+        it('should allow offset and limit to be directly passed', function(done) {
+            const paging = api.calcPaging({
+                offset: 24,
+                limit: 12
+            });
+
+            expect(paging.offset).to.equal(24);
+            expect(paging.limit).to.equal(12);
+            expect(paging.pageSize).to.equal(12);
+
+            // Best guess of this value
+            expect(paging.page).to.equal(2);
+
+            done();
+        });
+        it('should ignore offset and limit if pageSize and page are also passed in', function(done) {
+            const paging = api.calcPaging({
+                offset: 24,
+                limit: 12,
+                page: 3,
+                pageSize: 25
+            });
+
+            expect(paging.page).to.equal(3);
+            expect(paging.pageSize).to.equal(25);
+            expect(paging.offset).to.equal(50);
+            expect(paging.limit).to.equal(25);
+
+            done();
+        });
     });
 });

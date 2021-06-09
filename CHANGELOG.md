@@ -3,10 +3,13 @@
 ## 1.2.3
 > Released XX XXX 2021
 
+- Allowed limit and offset to be passed in directly for calcPaging()
+- Merged in dependabot fixes
+
 ## 1.2.2
 > Released 6 Apr 2020
 
-- Updated dependencies to fix vulerabilities
+- Updated dependencies to fix vulnerabilities
 
 ## 1.2.1
 > Released 9 Nov 2019

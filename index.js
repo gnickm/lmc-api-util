@@ -120,6 +120,20 @@ const calcPaging = function(params, options) {
         page: 1
     });
 
+    // limit and offset can be passed in directly, in which case we use them
+    // to calculate page and return it
+    if(params.offset && params.limit && !params.page && !params.pageSize) {
+        paging.offset = _.toSafeInteger(params.offset);
+        paging.limit = _.toSafeInteger(params.limit);
+
+        if(paging.offset && paging.limit) {
+            paging.pageSize = paging.limit;
+            paging.page = Math.floor(params.offset / paging.limit);
+
+            return paging;
+        }
+    }
+
     paging.page = _.toSafeInteger(paging.page);
     paging.pageSize = _.toSafeInteger(paging.pageSize);
 
