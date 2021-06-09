@@ -1,5 +1,8 @@
 # lmc-api-util Changelog
 
+## 1.2.3
+> Released XX XXX 2021
+
 ## 1.2.2
 > Released 6 Apr 2020
 
