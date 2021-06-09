@@ -1,9 +1,9 @@
 # lmc-api-util Changelog
 
 ## 1.2.3
-> Released XX XXX 2021
+> Released 9 Jun 2021
 
-- Allowed limit and offset to be passed in directly for calcPaging()
+- Allowed `limit` and `offset` to be passed in directly for `calcPaging()`
 - Merged in dependabot fixes
 
 ## 1.2.2
