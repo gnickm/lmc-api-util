@@ -214,12 +214,16 @@ app.get('/api/check', function(req, res) {
 ### calcPaging(params, options)
 
 Generates a well-defined object that can be used for paging when looking up
-data. Handles omitted parameters and calculates offset and limit values.
+data. Handles omitted parameters and calculates offset and limit values. `limit`
+and `offset` can also be passed in directly, but will be overriden if `page` or
+`pageSize` are provided.
 
 - `params` (required) - array or object of provided parameters. Usually can
 simply pass `req.query`. Recognized values are:
    - `page` - current page. Defaults to 1
    - `pageSize` - numer of objects per page. Defaults to 50, but is limited by `maxPageSize` below
+   - `limit` - can be set directly if `page` and `pageSize` are omitted
+   - `offset` - can be set directly if `page` and `pageSize` are omitted
 - `options` (optional) - other options for paging:
    - `maxPageSize` - maximum requestable page size. Defaults to 200
 
@@ -246,6 +250,10 @@ var app = express();
 //     {"result":"OK","message":"Paging!","page":4,"pageSize":100,"offset":300,"limit":100} 
 // Call /api/paging?page=5&pageSize=999 returns:
 //     {"result":"OK","message":"Paging!","page":4,"pageSize":200,"offset":400,"limit":200} 
+// Call /api/paging?limit=5&offset=10 returns:
+//     {"result":"OK","message":"Paging!","page":2,"pageSize":5,"offset":10,"limit":5} 
+// Call /api/paging?limit=5&offset=10&page=3&pageSize=12 returns:
+//     {"result":"OK","message":"Paging!","page":3,"pageSize":12,"offset":24,"limit":12} 
 
 app.get('/api/paging', function(req, res) {
     const paging = api.calcPaging(req.query);
