@@ -9,22 +9,22 @@ const api = require('lmc-api-util');
 
 var app = express();
 
-// Call to /api/ok returns status 200 OK and JSON: 
-//     {"result":"OK","message":"You called OK"} 
+// Call to /api/ok returns status 200 OK and JSON:
+//     {"result":"OK","message":"You called OK"}
 
 app.get('/api/ok', function(req, res) {
     api.makeOk(res, 'You called OK');
 });
 
-// Call to /api/thing/found returns status 200 OK and JSON: 
-//     {"result":"OK","message":"Found Thing 123","thing":{"foo":"bar"}} 
+// Call to /api/thing/found returns status 200 OK and JSON:
+//     {"result":"OK","message":"Found Thing 123","thing":{"foo":"bar"}}
 
 app.get('/api/thing/found', function(req, res) {
     api.makeFound(res, 'Thing 123', {thing: {foo: 'bar'}});
 });
 
-// Call to /api/thing/notfound returns status 404 Not Found and JSON: 
-//     {"result":"FAIL","message":"Could not find Thing 456"} 
+// Call to /api/thing/notfound returns status 404 Not Found and JSON:
+//     {"result":"FAIL","message":"Could not find Thing 456"}
 
 app.get('/api/thing/notfound', function(req, res) {
     api.makeNotFound(res, 'Thing 456');
@@ -43,7 +43,7 @@ $ npm install lmc-api-util
 
 ### makeOk(res, message, resultObj)
 
-Creates a response JSON message with `result` of OK and a supplied `message`. 
+Creates a response JSON message with `result` of OK and a supplied `message`.
 HTTP status is no explicitly set for this call, so will most likely be 200 OK.
 
 - `res` (required) - express response object
@@ -54,7 +54,7 @@ the response. Useful for GET REST requests that return something.
 ---
 ### makeFail(res, message, resultObj)
 
-Creates a response JSON message with `result` of FAIL and a supplied `message`. 
+Creates a response JSON message with `result` of FAIL and a supplied `message`.
 HTTP status is no explicitly set for this call, so will most likely be 200 OK.
 
 - `res` (required) - express response object
@@ -90,7 +90,7 @@ the response. Useful for GET REST requests that return something.
 ### makeCreated(res, itemDesc, resultObj)
 
 Creates a response JSON message with `result` of OK and creates a message that
-`itemDesc` was created. HTTP status is set to 201 CREATED. Usually want to 
+`itemDesc` was created. HTTP status is set to 201 CREATED. Usually want to
 return either the ID of the newly created entity or the entity itself.
 
 - `res` (required) - express response object
@@ -104,7 +104,7 @@ entity in the header of the response. This is a REST best practice.
 ### makeUpdated(res, itemDesc, resultObj)
 
 Creates a response JSON message with `result` of OK and creates a message that
-`itemDesc` was updated. HTTP status is set to 200 OK. Usually want to 
+`itemDesc` was updated. HTTP status is set to 200 OK. Usually want to
 return either the ID of the updated entity or the entity itself.
 
 - `res` (required) - express response object
@@ -123,7 +123,7 @@ Creates a response JSON message with `result` of OK and creates a message that
 - `res` (required) - express response object
 - `itemDesc` (optional) - description of what was deleted
 - `resultObj` (optional) - any members of this object will be passed along in
-the response. 
+the response.
 
 ---
 ### makeBadRequest(res, message)
@@ -138,8 +138,8 @@ malformed information in the request.
 ---
 ### makeUnauthorized(res, message)
 
-Creates a response JSON message with `result` of FAIL and a supplied message. HTTP 
-status is set to 401 Unauthorized. This is most useful for dealing with 
+Creates a response JSON message with `result` of FAIL and a supplied message. HTTP
+status is set to 401 Unauthorized. This is most useful for dealing with
 authentication issues.
 
 - `res` (required) - express response object
@@ -169,7 +169,7 @@ Creates a response JSON message with `result` of FAIL and creates a message that
 ### makeServerError(res, message)
 
 Creates a response JSON message with `result` of FAIL and a supplied `message`.
-HTTP status is set to 500 Internal Server Error. This is most useful for 
+HTTP status is set to 500 Internal Server Error. This is most useful for
 indicating an unexpected failure in the server.
 
 - `res` (required) - express response object
@@ -197,11 +197,11 @@ const api = require('lmc-api-util');
 var app = express();
 
 // Call /api/check?foo=1&bar=2 returns status 200 OK and JSON:
-//     {"result":"OK","message":"Parameters OK"} 
+//     {"result":"OK","message":"Parameters OK"}
 // Call /api/check?bar=2 returns status 400 Bad Request and JSON:
-//     {"result":"FAIL","message":"Missing required parameter: foo"} 
+//     {"result":"FAIL","message":"Missing required parameter: foo"}
 // Call /api/check returns status 400 Bad Request and JSON:
-//     {"result":"FAIL","message":"Missing required parameters: foo, bar"} 
+//     {"result":"FAIL","message":"Missing required parameters: foo, bar"}
 
 app.get('/api/check', function(req, res) {
     if(api.checkRequired(res, req.query, ['foo', 'bar'])) {
@@ -243,17 +243,17 @@ const api = require('lmc-api-util');
 var app = express();
 
 // Call /api/paging returns:
-//     {"result":"OK","message":"Paging!","page":1,"pageSize":50,"offset":0,"limit":50} 
+//     {"result":"OK","message":"Paging!","page":1,"pageSize":50,"offset":0,"limit":50}
 // Call /api/paging?page=3 returns:
-//     {"result":"OK","message":"Paging!","page":3,"pageSize":50,"offset":100,"limit":50} 
+//     {"result":"OK","message":"Paging!","page":3,"pageSize":50,"offset":100,"limit":50}
 // Call /api/paging?page=4&pageSize=100 returns:
-//     {"result":"OK","message":"Paging!","page":4,"pageSize":100,"offset":300,"limit":100} 
+//     {"result":"OK","message":"Paging!","page":4,"pageSize":100,"offset":300,"limit":100}
 // Call /api/paging?page=5&pageSize=999 returns:
-//     {"result":"OK","message":"Paging!","page":4,"pageSize":200,"offset":400,"limit":200} 
+//     {"result":"OK","message":"Paging!","page":4,"pageSize":200,"offset":400,"limit":200}
 // Call /api/paging?limit=5&offset=10 returns:
-//     {"result":"OK","message":"Paging!","page":2,"pageSize":5,"offset":10,"limit":5} 
+//     {"result":"OK","message":"Paging!","page":2,"pageSize":5,"offset":10,"limit":5}
 // Call /api/paging?limit=5&offset=10&page=3&pageSize=12 returns:
-//     {"result":"OK","message":"Paging!","page":3,"pageSize":12,"offset":24,"limit":12} 
+//     {"result":"OK","message":"Paging!","page":3,"pageSize":12,"offset":24,"limit":12}
 
 app.get('/api/paging', function(req, res) {
     const paging = api.calcPaging(req.query);
@@ -267,7 +267,7 @@ app.get('/api/paging', function(req, res) {
 [npm-url]: https://npmjs.org/package/lmc-api-util
 [npm-image]: http://img.shields.io/npm/v/lmc-api-util.svg
 
-[travis-url]: https://travis-ci.org/gnickm/lmc-api-util
+[travis-url]: https://travis-ci.com/gnickm/lmc-api-util
 [travis-image]: http://img.shields.io/travis/gnickm/lmc-api-util.svg
 
 [coveralls-url]: https://coveralls.io/github/gnickm/lmc-api-util?branch=master
