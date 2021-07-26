@@ -12,24 +12,28 @@ const request    = require('supertest');
 const HttpStatus = require('http-status-codes');
 const expect     = require('chai').expect;
 
-const api = require('../');
+const api    = require('..');
+const helper = require('./helper');
 
 // --------------------------------------------------------------------------
 
 var app = express();
 
-describe('lmc-api-util - makeOk() and children', function() {
-	describe('makeOk()', function() {
+describe('lmc-api-util - respondOk() and children', function() {
+	describe('respondOk()', function() {
 		before(function() {
 			app.get('/ok', function(req, res) {
 				if(req.query.resultobj) {
-					api.makeOk(res, 'OK result with object', {foo: 'bar'});
+					api.respondOk(res, 'OK result with object', {foo: 'bar'});
 				} else if(req.query.nomessage) {
-					api.makeOk(res);
+					api.respondOk(res);
 				} else {
-					api.makeOk(res, 'OK result');
+					api.respondOk(res, 'OK result');
 				}
 			});
+		});
+		it('should throw an error if passed something besides a result object', function() {
+			helper.expectErrorWithBadResultObject(api.respondOk);
 		});
 		it('should return OK result with message', function(done) {
 			request(app)
@@ -69,13 +73,13 @@ describe('lmc-api-util - makeOk() and children', function() {
 				});
 		});
 	});
-	describe('makeFound()', function() {
+	describe('respondFound()', function() {
 		before(function() {
 			app.get('/found', function(req, res) {
 				if(req.query.type === 'object') {
-					api.makeFound(res, 'Thing 123', {thing: {stuff: 'junk'}});
+					api.respondFound(res, 'Thing 123', {thing: {stuff: 'junk'}});
 				} else if(req.query.type === 'array') {
-					api.makeFound(res, 'Thing 123', {
+					api.respondFound(res, 'Thing 123', {
 						things: [
 							{id: 1},
 							{id: 2},
@@ -83,9 +87,12 @@ describe('lmc-api-util - makeOk() and children', function() {
 						]
 					});
 				} else {
-					api.makeFound(res, 'Thing 123', {thing: 'junk'});
+					api.respondFound(res, 'Thing 123', {thing: 'junk'});
 				}
 			});
+		});
+		it('should throw an error if passed something besides a result object', function() {
+			helper.expectErrorWithBadResultObject(api.respondFound);
 		});
 		it('should return OK with "Found" message and extra params', function(done) {
 			request(app)
@@ -132,11 +139,14 @@ describe('lmc-api-util - makeOk() and children', function() {
 				});
 		});
 	});
-	describe('makeFoundZero()', function() {
+	describe('respondFoundZero()', function() {
 		before(function() {
 			app.get('/foundzero', function(req, res) {
-				api.makeFoundZero(res, 'Things', {stuff: 'junk'});
+				api.respondFoundZero(res, 'Things', {stuff: 'junk'});
 			});
+		});
+		it('should throw an error if passed something besides a result object', function() {
+			helper.expectErrorWithBadResultObject(api.respondFoundZero);
 		});
 		it('should return OK with "Found zero" message', function(done) {
 			request(app)
@@ -152,14 +162,17 @@ describe('lmc-api-util - makeOk() and children', function() {
 				});
 		});
 	});
-	describe('makeCreated()', function() {
+	describe('respondCreated()', function() {
 		before(function() {
 			app.get('/created', function(req, res) {
-				api.makeCreated(res, 'Thing 123', {
+				api.respondCreated(res, 'Thing 123', {
 					location: '/created/123',
 					stuff: 'junk'
 				});
 			});
+		});
+		it('should throw an error if passed something besides a result object', function() {
+			helper.expectErrorWithBadResultObject(api.respondCreated);
 		});
 		it('should return CREATED status with "Created new" message and location header', function(done) {
 			request(app)
@@ -177,14 +190,17 @@ describe('lmc-api-util - makeOk() and children', function() {
 				});
 		});
 	});
-	describe('makeUpdated()', function() {
+	describe('respondUpdated()', function() {
 		before(function() {
 			app.get('/updated', function(req, res) {
-				api.makeUpdated(res, 'Thing 123', {
+				api.respondUpdated(res, 'Thing 123', {
 					location: '/updated/123',
 					stuff: 'junk'
 				});
 			});
+		});
+		it('should throw an error if passed something besides a result object', function() {
+			helper.expectErrorWithBadResultObject(api.respondUpdated);
 		});
 		it('should return OK status with "Updated" message and location header', function(done) {
 			request(app)
@@ -202,11 +218,14 @@ describe('lmc-api-util - makeOk() and children', function() {
 				});
 		});
 	});
-	describe('makeDeleted()', function() {
+	describe('respondDeleted()', function() {
 		before(function() {
 			app.get('/deleted', function(req, res) {
-				api.makeDeleted(res, 'Thing 123', {stuff: 'junk'});
+				api.respondDeleted(res, 'Thing 123', {stuff: 'junk'});
 			});
+		});
+		it('should throw an error if passed something besides a result object', function() {
+			helper.expectErrorWithBadResultObject(api.respondDeleted);
 		});
 		it('should return OK with "Deleted" message', function(done) {
 			request(app)
