@@ -3,6 +3,13 @@
 ## 2.0.0
 > Released XX XXX 2021
 
+### New
+- Added type checking of response object in `respond` functions, throwing an Error if it is not a valid `express` response object
+
+### Updated
+- Renamed `make` series of functions to `respond` to better reflect action of function. Legacy `make` functions are
+  still available for backward compatibility but are undocumented
+
 ## 1.2.3
 > Released 9 Jun 2021
 

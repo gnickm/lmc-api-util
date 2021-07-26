@@ -13,21 +13,21 @@ var app = express();
 //     {"result":"OK","message":"You called OK"}
 
 app.get('/api/ok', function(req, res) {
-    api.makeOk(res, 'You called OK');
+    api.respondOk(res, 'You called OK');
 });
 
 // Call to /api/thing/found returns status 200 OK and JSON:
 //     {"result":"OK","message":"Found Thing 123","thing":{"foo":"bar"}}
 
 app.get('/api/thing/found', function(req, res) {
-    api.makeFound(res, 'Thing 123', {thing: {foo: 'bar'}});
+    api.respondFound(res, 'Thing 123', {thing: {foo: 'bar'}});
 });
 
 // Call to /api/thing/notfound returns status 404 Not Found and JSON:
 //     {"result":"FAIL","message":"Could not find Thing 456"}
 
 app.get('/api/thing/notfound', function(req, res) {
-    api.makeNotFound(res, 'Thing 456');
+    api.respondNotFound(res, 'Thing 456');
 });
 
 ```
@@ -41,7 +41,24 @@ $ npm install lmc-api-util
 
 ## API
 
-### makeOk(res, message, resultObj)
+### Respond Functions
+This group of functions allows for the quick creation of normalized responses
+to REST API calls. They run the gamut from simple success to server errors,
+all generating a HTTP response code and a JSON object of the following
+pattern:
+
+```json
+{
+    "result": "[OK|FAIL]",
+    "message": "[Friendly Message]",
+    "someOptionalObject": {}
+}
+```
+
+All respond functions take an `express` response object as a first parameter
+and will throw an `Error` if it is invalid.
+
+#### respondOk(res, message, resultObj)
 
 Creates a response JSON message with `result` of OK and a supplied `message`.
 HTTP status is no explicitly set for this call, so will most likely be 200 OK.
@@ -49,10 +66,10 @@ HTTP status is no explicitly set for this call, so will most likely be 200 OK.
 - `res` (required) - express response object
 - `message` (optional) - message object to supply with response
 - `resultObj` (optional) - any members of this object will be passed along in
-the response. Useful for GET REST requests that return something.
+  the response. Useful for GET REST requests that return something.
 
 ---
-### makeFail(res, message, resultObj)
+#### respondFail(res, message, resultObj)
 
 Creates a response JSON message with `result` of FAIL and a supplied `message`.
 HTTP status is no explicitly set for this call, so will most likely be 200 OK.
@@ -60,10 +77,10 @@ HTTP status is no explicitly set for this call, so will most likely be 200 OK.
 - `res` (required) - express response object
 - `message` (optional) - message object to supply with response
 - `resultObj` (optional) - any members of this object will be passed along in
-the response. Useful for sending additional info on the failure.
+  the response. Useful for sending additional info on the failure.
 
 ---
-### makeFound(res, itemDesc, resultObj)
+#### respondFound(res, itemDesc, resultObj)
 
 Creates a response JSON message with `result` of OK and creates a message that
 `itemDesc` was found. HTTP status is set to 200 OK.
@@ -71,10 +88,10 @@ Creates a response JSON message with `result` of OK and creates a message that
 - `res` (required) - express response object
 - `itemDesc` (optional) - description of what was found
 - `resultObj` (optional) - any members of this object will be passed along in
-the response. Useful for GET REST requests that return something.
+   the response. Useful for GET REST requests that return something.
 
 ---
-### makeFoundZero(res, itemDesc, resultObj)
+#### respondFoundZero(res, itemDesc, resultObj)
 
 Creates a response JSON message with `result` of OK and creates a message that
 zero of `itemDesc` were found. HTTP status is set to 200 OK. This function is
@@ -87,7 +104,7 @@ most useful for `findAll()` type functions where nothing was found, rather than
 the response. Useful for GET REST requests that return something.
 
 ---
-### makeCreated(res, itemDesc, resultObj)
+#### respondCreated(res, itemDesc, resultObj)
 
 Creates a response JSON message with `result` of OK and creates a message that
 `itemDesc` was created. HTTP status is set to 201 CREATED. Usually want to
@@ -96,12 +113,12 @@ return either the ID of the newly created entity or the entity itself.
 - `res` (required) - express response object
 - `itemDesc` (optional) - description of what was created
 - `resultObj` (optional) - any members of this object will be passed along in
-the response. Useful for GET REST requests that return something.
+  the response. Useful for GET REST requests that return something.
 - `resultObj.location` (optional) - this will set the location URL of the new
-entity in the header of the response. This is a REST best practice.
+  entity in the header of the response. This is a REST best practice.
 
 ---
-### makeUpdated(res, itemDesc, resultObj)
+#### respondUpdated(res, itemDesc, resultObj)
 
 Creates a response JSON message with `result` of OK and creates a message that
 `itemDesc` was updated. HTTP status is set to 200 OK. Usually want to
@@ -110,12 +127,12 @@ return either the ID of the updated entity or the entity itself.
 - `res` (required) - express response object
 - `itemDesc` (optional) - description of what was updated
 - `resultObj` (optional) - any members of this object will be passed along in
-the response. Useful for GET REST requests that return something.
+  the response. Useful for GET REST requests that return something.
 - `resultObj.location` (optional) - this will set the location URL of the new
-entity in the header of the response. This is a REST best practice.
+  entity in the header of the response. This is a REST best practice.
 
 ---
-### makeDeleted(res, itemDesc, resultObj)
+#### respondDeleted(res, itemDesc, resultObj)
 
 Creates a response JSON message with `result` of OK and creates a message that
 `itemDesc` was deleted. HTTP status is set to 200 OK.
@@ -123,10 +140,10 @@ Creates a response JSON message with `result` of OK and creates a message that
 - `res` (required) - express response object
 - `itemDesc` (optional) - description of what was deleted
 - `resultObj` (optional) - any members of this object will be passed along in
-the response.
+  the response.
 
 ---
-### makeBadRequest(res, message)
+#### respondBadRequest(res, message)
 
 Creates a response JSON message with `result` of FAIL and a supplied `message`.
 HTTP status is set to 400 Bad Request. This is most useful for missing or
@@ -136,7 +153,7 @@ malformed information in the request.
 - `message` (optional) - message returned with the response
 
 ---
-### makeUnauthorized(res, message)
+#### respondUnauthorized(res, message)
 
 Creates a response JSON message with `result` of FAIL and a supplied message. HTTP
 status is set to 401 Unauthorized. This is most useful for dealing with
@@ -146,7 +163,7 @@ authentication issues.
 - `message` (optional) - message returned with the response
 
 ---
-### makeForbidden(res, itemDesc)
+#### respondForbidden(res, itemDesc)
 
 Creates a response JSON message with `result` of FAIL and creates a message that
 `itemDesc` cannot be accessed by the current user. HTTP status is set to 403
@@ -157,7 +174,7 @@ access something that they do not have permissions to access.
 - `itemDesc` (optional) - description of what was attempted to be accessed
 
 ---
-### makeNotFound(res, itemDesc)
+#### respondNotFound(res, itemDesc)
 
 Creates a response JSON message with `result` of FAIL and creates a message that
 `itemDesc` was not found. HTTP status is set to 404 Not Found.
@@ -166,7 +183,7 @@ Creates a response JSON message with `result` of FAIL and creates a message that
 - `itemDesc` (optional) - description of what was not found
 
 ---
-### makeServerError(res, message)
+#### respondServerError(res, message)
 
 Creates a response JSON message with `result` of FAIL and a supplied `message`.
 HTTP status is set to 500 Internal Server Error. This is most useful for
