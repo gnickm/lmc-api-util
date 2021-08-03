@@ -1,6 +1,5 @@
 // --------------------------------------------------------------------------
-// Copyright (C) 2016 Nick Mitchell
-// MIT Licensed
+// Copyright (C) 2016-2021 Nick Mitchell - MIT Licensed
 // --------------------------------------------------------------------------
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
