@@ -25,6 +25,7 @@
   "homepage": "https://github.com/gnickm/lmc-api-util#readme",
   "devDependencies": {
     "chai": "^3.5.0",
+    "chance": "^1.1.7",
     "coveralls": "^3.1.1",
     "express": "^4.14.0",
     "mocha": "^6.2.3",

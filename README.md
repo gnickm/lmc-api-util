@@ -58,6 +58,7 @@ pattern:
 All respond functions take an `express` response object as a first parameter
 and will throw an `Error` if it is invalid.
 
+---
 #### respondOk(res, message, resultObj)
 
 Creates a response JSON message with `result` of OK and a supplied `message`.
@@ -193,42 +194,13 @@ indicating an unexpected failure in the server.
 - `message` (optional) - message returned with the response
 
 ---
-### checkRequired(res, params, required)
-
-Checks for existence of all `required` parameters in `params`. Returns true
-and leaves `res` unmodified if all the required paramaters are present.
-Returns false and creates a 400 Bad Request status response and returns
-missing parameters in message if all the required paramaters are not present.
-
-- `res` (required) - express response object
-- `params` (required) - array or object of provided parameters. Usually can
-simply pass `req.query`
-- `required` (required) - array of parameter names to check
-
-Example:
-
-```javascript
-const express = require('express');
-const api = require('lmc-api-util');
-
-var app = express();
-
-// Call /api/check?foo=1&bar=2 returns status 200 OK and JSON:
-//     {"result":"OK","message":"Parameters OK"}
-// Call /api/check?bar=2 returns status 400 Bad Request and JSON:
-//     {"result":"FAIL","message":"Missing required parameter: foo"}
-// Call /api/check returns status 400 Bad Request and JSON:
-//     {"result":"FAIL","message":"Missing required parameters: foo, bar"}
-
-app.get('/api/check', function(req, res) {
-    if(api.checkRequired(res, req.query, ['foo', 'bar'])) {
-        api.makeOk(res, 'Parameters OK');
-    }
-});
-```
+### Request Functions
+This group of functions manages and processes incoming requests. They generate
+normailzed functions for paging and queries and can validate incoming
+parameters.
 
 ---
-### calcPaging(params, options)
+#### calcPaging(params, options)
 
 Generates a well-defined object that can be used for paging when looking up
 data. Handles omitted parameters and calculates offset and limit values. `limit`
@@ -241,6 +213,8 @@ simply pass `req.query`. Recognized values are:
    - `pageSize` - numer of objects per page. Defaults to 50, but is limited by `maxPageSize` below
    - `limit` - can be set directly if `page` and `pageSize` are omitted
    - `offset` - can be set directly if `page` and `pageSize` are omitted
+   - `_page` - *JSON Server* style alias for `page`
+   - `_limit` - *JSON Server* style alias for `pageSize`
 - `options` (optional) - other options for paging:
    - `maxPageSize` - maximum requestable page size. Defaults to 200
 
@@ -265,6 +239,8 @@ var app = express();
 //     {"result":"OK","message":"Paging!","page":3,"pageSize":50,"offset":100,"limit":50}
 // Call /api/paging?page=4&pageSize=100 returns:
 //     {"result":"OK","message":"Paging!","page":4,"pageSize":100,"offset":300,"limit":100}
+// Call /api/paging?_page=4&_limit=100 returns:
+//     {"result":"OK","message":"Paging!","page":4,"pageSize":100,"offset":300,"limit":100}
 // Call /api/paging?page=5&pageSize=999 returns:
 //     {"result":"OK","message":"Paging!","page":4,"pageSize":200,"offset":400,"limit":200}
 // Call /api/paging?limit=5&offset=10 returns:
@@ -277,6 +253,75 @@ app.get('/api/paging', function(req, res) {
     api.makeOk(res, 'Paging!', paging);
 });
 ```
+
+---
+#### validateRequest(requestValues, required)
+
+Checks for existence of all `required` parameters in `requestValues`. Returns
+true if all the required paramaters are present or throws an `Error` if any are
+missing. Additionally, if `required` is passed as an object, type checking will
+be applied to the values as well, throwing an `Error` if the value is invalid.
+The `message` parameter of the thrown `Error` contains text that can be
+directly returned by the API as an error message.
+
+- `requestValues` (required) - object of provided parameters. Usually can
+  simply pass `req.query` or `req.body`
+- `required` (required) - if passed an array, it will ensure all values are
+  present as keys in `requestValues`. If passed an object, it will first
+  ensure all the keys of the object are present as keys in `requestValues`,
+  then will do a check for valid types as specified:
+  - **VALIDATE_EMAIL** - request value must be a valid email address
+  - **VALIDATE_NOT_EMPTY** - request value must not be empty or null
+  - **VALIDATE_UUID** - request value must be a valid UUID
+
+Example:
+
+```javascript
+const express = require('express');
+const api = require('lmc-api-util');
+
+var app = express();
+
+// Call /api/checkrequired?foo=1&bar=2 returns status 200 OK and JSON:
+//     {"result":"OK","message":"Parameters OK"}
+// Call /api/checkrequired?bar=2 returns status 400 Bad Request and JSON:
+//     {"result":"FAIL","message":"Missing required parameter: foo"}
+// Call /api/checkrequired returns status 400 Bad Request and JSON:
+//     {"result":"FAIL","message":"Missing required parameters: foo, bar"}
+
+app.get('/api/checkrequired', function(req, res) {
+    try {
+        api.validateRequest(req.query, ['foo', 'bar']);
+        api.makeOk(res, 'Parameters OK');
+    } catch(err) {
+        api.respondBadRequest(res, err.message);
+    }
+});
+
+// Call /api/validate?foo=bob@bob.com&bar=not+empty&baz=354245a5-ab13-41ff-8245-1271b5662eff returns status 200 OK and JSON:
+//     {"result":"OK","message":"Parameters OK"}
+// Call /api/validate?bar=not+empty&baz=354245a5-ab13-41ff-8245-1271b5662eff returns status 400 Bad Request and JSON:
+//     {"result":"FAIL","message":"Missing required parameter: foo"}
+// Call /api/validate?foo=bob@bob.com&bar=not+empty&baz=bad-uuid returns status 400 Bad Request and JSON:
+//     {"result":"FAIL","message":"Request parameter \"baz\" must be a valid UUID"}
+// Call /api/validate?foo=bob@bob.com&bar=&baz=bad-uuid returns status 400 Bad Request and JSON:
+//     {"result":"FAIL","message":"Request parameter \"bar\" must not be empty"}
+
+app.get('/api/validate', function(req, res) {
+    try {
+        api.validateRequest(req.query, {
+            foo: api.VALIDATE_EMAIL,
+            bar: api.VALIDATE_NOT_EMPTY,
+            baz: api.VALIDATE_UUID
+        });
+        api.makeOk(res, 'Parameters OK');
+    } catch(err) {
+        api.respondBadRequest(res, err.message);
+    }
+});
+```
+
+---
 ## License
 
 [MIT](LICENSE)
