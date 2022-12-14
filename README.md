@@ -16,11 +16,18 @@ app.get('/api/ok', function(req, res) {
     api.respondOk(res, 'You called OK');
 });
 
-// Call to /api/thing/found returns status 200 OK and JSON:
+// Call to /api/thing/338a0bbe-e675-43ae-ac10-0019f1606401 returns status 200 OK and JSON:
 //     {"result":"OK","message":"Found Thing 123","thing":{"foo":"bar"}}
+// Call to /api/thing/bogus returns status 400 Bad Request and JSON:
+//     {"result":"FAIL","message":"Request parameter \"id\" must be a valid UUID"}
 
-app.get('/api/thing/found', function(req, res) {
-    api.respondFound(res, 'Thing 123', {thing: {foo: 'bar'}});
+app.get('/api/thing/:id', function(req, res) {
+    try {
+        api.validateRequest(req.params, {id: api.VALIDATE_UUID});
+        api.respondFound(res, 'Thing 123', {thing: {foo: 'bar'}});
+    } catch(err) {
+        api.respondBadRequest(res, err.message);
+    }
 });
 
 // Call to /api/thing/notfound returns status 404 Not Found and JSON:
@@ -207,7 +214,7 @@ data. Handles omitted parameters and calculates offset and limit values. `limit`
 and `offset` can also be passed in directly, but will be overriden if `page` or
 `pageSize` are provided.
 
-- `params` (required) - array or object of provided parameters. Usually can
+- `requestParams` (required) - array or object of provided parameters. Usually can
 simply pass `req.query`. Recognized values are:
    - `page` - current page. Defaults to 1
    - `pageSize` - numer of objects per page. Defaults to 50, but is limited by `maxPageSize` below
@@ -255,20 +262,20 @@ app.get('/api/paging', function(req, res) {
 ```
 
 ---
-#### validateRequest(requestValues, required)
+#### validateRequest(requestParams, required)
 
-Checks for existence of all `required` parameters in `requestValues`. Returns
+Checks for existence of all `required` parameters in `requestParams`. Returns
 true if all the required paramaters are present or throws an `Error` if any are
 missing. Additionally, if `required` is passed as an object, type checking will
 be applied to the values as well, throwing an `Error` if the value is invalid.
 The `message` parameter of the thrown `Error` contains text that can be
 directly returned by the API as an error message.
 
-- `requestValues` (required) - object of provided parameters. Usually can
+- `requestParams` (required) - object of provided parameters. Usually can
   simply pass `req.query` or `req.body`
 - `required` (required) - if passed an array, it will ensure all values are
-  present as keys in `requestValues`. If passed an object, it will first
-  ensure all the keys of the object are present as keys in `requestValues`,
+  present as keys in `requestParams`. If passed an object, it will first
+  ensure all the keys of the object are present as keys in `requestParams`,
   then will do a check for valid types as specified:
   - **VALIDATE_EMAIL** - request value must be a valid email address
   - **VALIDATE_NOT_EMPTY** - request value must not be empty or null
@@ -320,6 +327,40 @@ app.get('/api/validate', function(req, res) {
     }
 });
 ```
+
+---
+### Object Functions
+At times it is more helpful to load a full dataset into memory and
+page/filter/sort the objects in memory. This group of functions provides
+helpers to manage this in a reliable way.
+
+---
+#### filterObjects(allObjs, attributes, requestParams)
+
+Returns a subset of `allObjs` that match filters defined by `requestParams`.
+Any key in `requestParams` that starts with `filter|` and exists in the
+`attributes` array will be used to check each object in `allObjs`. Any object
+that matches will be returned.
+
+- `allObjs` (required) - full array of objects to be filtered
+- `attributes` (required) - array of attribute names to check on objects
+- `requestParams` (required) - object of parameters as part of the request.
+  Any parameter that starts with `filter|` will be used to filter the object
+  list, checking against `attributes` and the matching value.
+
+
+
+---
+#### pageObjects(allObjs, paging)
+
+Takes a `paging` object generated from `calcPaging()` and pages the full array
+`allObjs`, returning only the correct page of objects. This also modifies the
+`paging` object, adding `total` for the total objects and `hasMore` if there
+are more objects to be paged. This funcion should be called *after* filtering
+and sorting.
+
+- `allObjs` (required) - full array of objects to be paged
+- `paging` (required) - paging object generated from `calcPaging()`
 
 ---
 ## License

@@ -1,16 +1,19 @@
 # lmc-api-util Changelog
 
 ## 2.0.0
-> Released XX XXX 2021
+> Released XX Aug 2021
 
 ### New
 - Added type checking of response object in `respond` functions, throwing an Error if it is not a valid `express` response object
 - Added `validateRequest()` to not only check for required query values but check the type of values
+- Added object functions for paging/filtering/sorting objects
 
 ### Updated
 - Renamed `make` series of functions to `respond` to better reflect action of function. Legacy `make` functions are
   still available for backward compatibility but are undocumented
 - Added support for *JSON Server* style paging parameters (`_page` and `_limit`) in `calcPaging()`
+- Deprecated `checkRequired()` function, as it was superceded by `validateRequest()`. It is still available for backward
+  compatibility but is undocumented
 
 ## 1.2.3
 > Released 9 Jun 2021
