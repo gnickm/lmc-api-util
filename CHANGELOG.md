@@ -1,5 +1,11 @@
 # lmc-api-util Changelog
 
+## 1.3.0
+> Released 14 Dec 2022
+
+- Bumped minimum node to v6
+- Upgraded dependencies to resolve vulnerabilities
+
 ## 1.2.3
 > Released 9 Jun 2021
 
