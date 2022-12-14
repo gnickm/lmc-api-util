@@ -10,7 +10,7 @@
 
 const express    = require('express');
 const request    = require('supertest');
-const HttpStatus = require('http-status-codes');
+const HttpStatus = require('http-status-codes').StatusCodes;
 const expect     = require('chai').expect;
 
 const api = require('../');

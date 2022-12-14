@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------
-// Copyright (C) 2016 Nick Mitchell
+// Copyright (C) 2016-2022 Nick Mitchell
 // MIT Licensed
 // --------------------------------------------------------------------------
 /* eslint-env mocha */
@@ -9,7 +9,7 @@
 
 const express    = require('express');
 const request    = require('supertest');
-const HttpStatus = require('http-status-codes');
+const HttpStatus = require('http-status-codes').StatusCodes;
 const expect     = require('chai').expect;
 
 const api = require('../');

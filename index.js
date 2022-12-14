@@ -1,12 +1,12 @@
 // --------------------------------------------------------------------------
-// Copyright (C) 2016-2019 Nick Mitchell
+// Copyright (C) 2016-2022 Nick Mitchell
 // MIT Licensed
 // --------------------------------------------------------------------------
 
 'use strict';
 
 const _          = require('lodash');
-const HttpStatus = require('http-status-codes');
+const HttpStatus = require('http-status-codes').StatusCodes;
 
 // --------------------------------------------------------------------------
 
