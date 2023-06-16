@@ -1,15 +1,15 @@
 // --------------------------------------------------------------------------
-// Copyright (C) 2016-2021 Nick Mitchell - MIT Licensed
+// Copyright (C) 2016-2023 Nick Mitchell - MIT Licensed
 // --------------------------------------------------------------------------
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-magic-numbers */
 'use strict';
 
-const express    = require('express');
-const request    = require('supertest');
-const HttpStatus = require('http-status-codes');
-const expect     = require('chai').expect;
+const express = require('express');
+const request = require('supertest');
+const status  = require('http-status-codes').StatusCodes;
+const expect  = require('chai').expect;
 
 const api    = require('..');
 const helper = require('./helper');
@@ -38,7 +38,7 @@ describe('lmc-api-util - respondOk() and children', function() {
 			request(app)
 				.get('/ok')
 				.set('Accept', 'application/json')
-				.expect(HttpStatus.OK)
+				.expect(status.OK)
 				.end(function(err, res) {
 					expect(err).to.be.null;
 					expect(res.body.result).to.equal('OK');
@@ -50,7 +50,7 @@ describe('lmc-api-util - respondOk() and children', function() {
 			request(app)
 				.get('/ok?nomessage=true')
 				.set('Accept', 'application/json')
-				.expect(HttpStatus.OK)
+				.expect(status.OK)
 				.end(function(err, res) {
 					expect(err).to.be.null;
 					expect(res.body.result).to.equal('OK');
@@ -62,7 +62,7 @@ describe('lmc-api-util - respondOk() and children', function() {
 			request(app)
 				.get('/ok?resultobj=true')
 				.set('Accept', 'application/json')
-				.expect(HttpStatus.OK)
+				.expect(status.OK)
 				.end(function(err, res) {
 					expect(err).to.be.null;
 					expect(res.body.result).to.equal('OK');
@@ -97,7 +97,7 @@ describe('lmc-api-util - respondOk() and children', function() {
 			request(app)
 				.get('/found')
 				.set('Accept', 'application/json')
-				.expect(HttpStatus.OK)
+				.expect(status.OK)
 				.end(function(err, res) {
 					expect(err).to.be.null;
 					expect(res.body.result).to.equal('OK');
@@ -110,7 +110,7 @@ describe('lmc-api-util - respondOk() and children', function() {
 			request(app)
 				.get('/found?type=object')
 				.set('Accept', 'application/json')
-				.expect(HttpStatus.OK)
+				.expect(status.OK)
 				.end(function(err, res) {
 					expect(err).to.be.null;
 					expect(res.body.result).to.equal('OK');
@@ -124,7 +124,7 @@ describe('lmc-api-util - respondOk() and children', function() {
 			request(app)
 				.get('/found?type=array')
 				.set('Accept', 'application/json')
-				.expect(HttpStatus.OK)
+				.expect(status.OK)
 				.end(function(err, res) {
 					expect(err).to.be.null;
 					expect(res.body.result).to.equal('OK');
@@ -151,7 +151,7 @@ describe('lmc-api-util - respondOk() and children', function() {
 			request(app)
 				.get('/foundzero')
 				.set('Accept', 'application/json')
-				.expect(HttpStatus.OK)
+				.expect(status.OK)
 				.end(function(err, res) {
 					expect(err).to.be.null;
 					expect(res.body.result).to.equal('OK');
@@ -177,7 +177,7 @@ describe('lmc-api-util - respondOk() and children', function() {
 			request(app)
 				.get('/created')
 				.set('Accept', 'application/json')
-				.expect(HttpStatus.CREATED)
+				.expect(status.CREATED)
 				.end(function(err, res) {
 					expect(err).to.be.null;
 					expect(res.header.location).to.equal('/created/123');
@@ -205,7 +205,7 @@ describe('lmc-api-util - respondOk() and children', function() {
 			request(app)
 				.get('/updated')
 				.set('Accept', 'application/json')
-				.expect(HttpStatus.OK)
+				.expect(status.OK)
 				.end(function(err, res) {
 					expect(err).to.be.null;
 					expect(res.header.location).to.equal('/updated/123');
@@ -230,7 +230,7 @@ describe('lmc-api-util - respondOk() and children', function() {
 			request(app)
 				.get('/deleted')
 				.set('Accept', 'application/json')
-				.expect(HttpStatus.OK)
+				.expect(status.OK)
 				.end(function(err, res) {
 					expect(err).to.be.null;
 					expect(res.body.result).to.equal('OK');

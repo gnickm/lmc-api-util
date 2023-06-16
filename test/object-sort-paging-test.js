@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------
-// Copyright (C) 2016-2021 Nick Mitchell - MIT Licensed
+// Copyright (C) 2016-2023 Nick Mitchell - MIT Licensed
 // --------------------------------------------------------------------------
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
@@ -31,74 +31,7 @@ const TEST_OBJS = [
 
 const TEST_ATTRS = ['id', 'group', 'order', 'feels', 'bool', 'uniq'];
 
-describe('lmc-api-util - Object tests', function() {
-    describe('filterObjects()', function() {
-        it('should return full list if empty query', function(done) {
-            var objs = api.filterObjects(TEST_OBJS, TEST_ATTRS, {});
-
-            expect(objs).to.have.lengthOf(6);
-            done();
-        });
-        it('should return full list if no filter in query', function(done) {
-            var objs = api.filterObjects(TEST_OBJS, TEST_ATTRS, {
-                foo: 1,
-                bar: 2,
-                baz: 'zip',
-                iam: null
-            });
-
-            expect(objs).to.have.lengthOf(6);
-            done();
-        });
-        it('should ignore filters not in attributes list', function(done) {
-            var objs = api.filterObjects(TEST_OBJS, TEST_ATTRS, {
-                'filter|foo': 1,
-                'filter|bar': 2,
-                'filter|baz': 'zip'
-            });
-
-            expect(objs).to.have.lengthOf(6);
-            done();
-        });
-        it('should return filtered list for single filter', function(done) {
-            var objs = api.filterObjects(TEST_OBJS, TEST_ATTRS, {'filter|group': 2});
-
-            expect(objs).to.have.lengthOf(2);
-
-            objs = api.filterObjects(TEST_OBJS, TEST_ATTRS, {'filter|id': 2});
-            expect(objs).to.have.lengthOf(1);
-
-            objs = api.filterObjects(TEST_OBJS, TEST_ATTRS, {'filter|feels': 'good'});
-            expect(objs).to.have.lengthOf(3);
-
-            done();
-        });
-        it('should return combined list for multiple filters', function(done) {
-            var objs = api.filterObjects(TEST_OBJS, TEST_ATTRS, {'filter|group': [1, 2]});
-
-            expect(objs).to.have.lengthOf(4);
-
-            done();
-        });
-        it('should handle booleans as native or string filters', function(done) {
-            var objs = api.filterObjects(TEST_OBJS, TEST_ATTRS, {'filter|bool': false});
-
-            expect(objs).to.have.lengthOf(3);
-
-            objs = api.filterObjects(TEST_OBJS, TEST_ATTRS, {'filter|bool': 'true'});
-            expect(objs).to.have.lengthOf(3);
-
-            done();
-        });
-        it('should return empty list for no matches', function(done) {
-            var objs = api.filterObjects(TEST_OBJS, TEST_ATTRS, {'filter|group': 4});
-
-            expect(objs).to.have.lengthOf(0);
-
-            done();
-        });
-    });
-
+describe('lmc-api-util - Object Sort & Paging tests', function() {
     describe('sortObjects()', function() {
         it('should return natural order if empty query', function(done) {
             var objs = api.sortObjects(TEST_OBJS, TEST_ATTRS, {});

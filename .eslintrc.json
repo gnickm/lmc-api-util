@@ -63,7 +63,7 @@
         "id-blacklist": "error",
         "id-length": [
 			"error",
-			{ "exceptions": ["i", "_"] }
+			{ "exceptions": ["i", "j", "k", "_"] }
 		],
         "id-match": "error",
         "indent": "off",

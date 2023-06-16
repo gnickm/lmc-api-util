@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------
-// Copyright (C) 2016-2021 Nick Mitchell - MIT Licensed
+// Copyright (C) 2016-2023 Nick Mitchell - MIT Licensed
 // --------------------------------------------------------------------------
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
@@ -7,10 +7,10 @@
 
 'use strict';
 
-const express    = require('express');
-const request    = require('supertest');
-const HttpStatus = require('http-status-codes');
-const expect     = require('chai').expect;
+const express = require('express');
+const request = require('supertest');
+const status  = require('http-status-codes');
+const expect  = require('chai').expect;
 
 const api = require('../');
 
@@ -30,7 +30,7 @@ describe('lmc-api-util - checkRequired() [legacy function]', function() {
         request(app)
             .get('/checkreq?foo=1&bar=2&baz=3')
             .set('Accept', 'application/json')
-            .expect(HttpStatus.OK)
+            .expect(status.OK)
             .end(function(err, res) {
                 expect(err).to.be.null;
                 expect(res.body.result).to.equal('OK');
@@ -42,7 +42,7 @@ describe('lmc-api-util - checkRequired() [legacy function]', function() {
         request(app)
             .get('/checkreq?bar=2&baz=3')
             .set('Accept', 'application/json')
-            .expect(HttpStatus.BAD_REQUEST)
+            .expect(status.BAD_REQUEST)
             .end(function(err, res) {
                 expect(err).to.be.null;
                 expect(res.body.result).to.equal('FAIL');
@@ -54,7 +54,7 @@ describe('lmc-api-util - checkRequired() [legacy function]', function() {
         request(app)
             .get('/checkreq')
             .set('Accept', 'application/json')
-            .expect(HttpStatus.BAD_REQUEST)
+            .expect(status.BAD_REQUEST)
             .end(function(err, res) {
                 expect(err).to.be.null;
                 expect(res.body.result).to.equal('FAIL');

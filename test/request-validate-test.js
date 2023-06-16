@@ -6,12 +6,12 @@
 /* eslint-disable no-magic-numbers */
 'use strict';
 
-const express    = require('express');
-const request    = require('supertest');
-const HttpStatus = require('http-status-codes');
-const _      = require('lodash');
-const expect = require('chai').expect;
-const Chance = require('chance');
+const express = require('express');
+const request = require('supertest');
+const status  = require('http-status-codes').StatusCodes;
+const _       = require('lodash');
+const expect  = require('chai').expect;
+const Chance  = require('chance');
 
 const api = require('..');
 
@@ -134,7 +134,7 @@ describe('lmc-api-util - validateRequest()', function() {
             request(app)
                 .get('/validate?email=' + chance.email() + '&uuid=' + chance.guid() + '&notnull=whatever')
                 .set('Accept', 'application/json')
-                .expect(HttpStatus.OK)
+                .expect(status.OK)
                 .end(function(err, res) {
                     expect(err).to.be.null;
                     expect(res.body.result).to.equal('OK');
@@ -147,7 +147,7 @@ describe('lmc-api-util - validateRequest()', function() {
             request(app)
                 .get('/validate?email=' + chance.email() + '&notnull=whatever')
                 .set('Accept', 'application/json')
-                .expect(HttpStatus.BAD_REQUEST)
+                .expect(status.BAD_REQUEST)
                 .end(function(err, res) {
                     expect(err).to.be.null;
                     expect(res.body.result).to.equal('FAIL');
@@ -161,7 +161,7 @@ describe('lmc-api-util - validateRequest()', function() {
             request(app)
                 .get('/validate')
                 .set('Accept', 'application/json')
-                .expect(HttpStatus.BAD_REQUEST)
+                .expect(status.BAD_REQUEST)
                 .end(function(err, res) {
                     expect(err).to.be.null;
                     expect(res.body.result).to.equal('FAIL');
@@ -177,7 +177,7 @@ describe('lmc-api-util - validateRequest()', function() {
             request(app)
                 .get('/validate?email=bogus&uuid=' + chance.guid() + '&notnull=whatever')
                 .set('Accept', 'application/json')
-                .expect(HttpStatus.BAD_REQUEST)
+                .expect(status.BAD_REQUEST)
                 .end(function(err, res) {
                     expect(err).to.be.null;
                     expect(res.body.result).to.equal('FAIL');
@@ -190,7 +190,7 @@ describe('lmc-api-util - validateRequest()', function() {
             request(app)
                 .get('/validate?email=' + chance.email() + '&uuid=' + chance.guid() + '&notnull=')
                 .set('Accept', 'application/json')
-                .expect(HttpStatus.BAD_REQUEST)
+                .expect(status.BAD_REQUEST)
                 .end(function(err, res) {
                     expect(err).to.be.null;
                     expect(res.body.result).to.equal('FAIL');

@@ -1,15 +1,15 @@
 // --------------------------------------------------------------------------
-// Copyright (c) 2016-2021 Nick Mitchell - MIT Licensed
+// Copyright (c) 2016-2023 Nick Mitchell - MIT Licensed
 // --------------------------------------------------------------------------
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-magic-numbers */
 'use strict';
 
-const express    = require('express');
-const request    = require('supertest');
-const HttpStatus = require('http-status-codes');
-const expect     = require('chai').expect;
+const express = require('express');
+const request = require('supertest');
+const status  = require('http-status-codes').StatusCodes;
+const expect  = require('chai').expect;
 
 const api    = require('..');
 const helper = require('./helper');
@@ -38,7 +38,7 @@ describe('lmc-api-util - respondFail() and children', function() {
             request(app)
                 .get('/fail')
                 .set('Accept', 'application/json')
-                .expect(HttpStatus.OK)
+                .expect(status.OK)
                 .end(function(err, res) {
                     expect(err).to.be.null;
                     expect(res.body.result).to.equal('FAIL');
@@ -50,7 +50,7 @@ describe('lmc-api-util - respondFail() and children', function() {
             request(app)
                 .get('/fail?nomessage=true')
                 .set('Accept', 'application/json')
-                .expect(HttpStatus.OK)
+                .expect(status.OK)
                 .end(function(err, res) {
                     expect(err).to.be.null;
                     expect(res.body.result).to.equal('FAIL');
@@ -62,7 +62,7 @@ describe('lmc-api-util - respondFail() and children', function() {
             request(app)
                 .get('/fail?resultobj=true')
                 .set('Accept', 'application/json')
-                .expect(HttpStatus.OK)
+                .expect(status.OK)
                 .end(function(err, res) {
                     expect(err).to.be.null;
                     expect(res.body.result).to.equal('FAIL');
@@ -85,7 +85,7 @@ describe('lmc-api-util - respondFail() and children', function() {
             request(app)
                 .get('/notfound')
                 .set('Accept', 'application/json')
-                .expect(HttpStatus.NOT_FOUND)
+                .expect(status.NOT_FOUND)
                 .end(function(err, res) {
                     expect(err).to.be.null;
                     expect(res.body.result).to.equal('FAIL');
@@ -107,7 +107,7 @@ describe('lmc-api-util - respondFail() and children', function() {
             request(app)
                 .get('/badreq')
                 .set('Accept', 'application/json')
-                .expect(HttpStatus.BAD_REQUEST)
+                .expect(status.BAD_REQUEST)
                 .end(function(err, res) {
                     expect(err).to.be.null;
                     expect(res.body.result).to.equal('FAIL');
@@ -129,7 +129,7 @@ describe('lmc-api-util - respondFail() and children', function() {
             request(app)
                 .get('/unauth')
                 .set('Accept', 'application/json')
-                .expect(HttpStatus.UNAUTHORIZED)
+                .expect(status.UNAUTHORIZED)
                 .end(function(err, res) {
                     expect(err).to.be.null;
                     expect(res.body.result).to.equal('FAIL');
@@ -151,7 +151,7 @@ describe('lmc-api-util - respondFail() and children', function() {
             request(app)
                 .get('/forbid')
                 .set('Accept', 'application/json')
-                .expect(HttpStatus.FORBIDDEN)
+                .expect(status.FORBIDDEN)
                 .end(function(err, res) {
                     expect(err).to.be.null;
                     expect(res.body.result).to.equal('FAIL');
@@ -173,7 +173,7 @@ describe('lmc-api-util - respondFail() and children', function() {
             request(app)
                 .get('/servererror')
                 .set('Accept', 'application/json')
-                .expect(HttpStatus.INTERNAL_SERVER_ERROR)
+                .expect(status.INTERNAL_SERVER_ERROR)
                 .end(function(err, res) {
                     expect(err).to.be.null;
                     expect(res.body.result).to.equal('FAIL');
