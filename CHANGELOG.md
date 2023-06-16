@@ -16,6 +16,12 @@
 - Deprecated `checkRequired()` function, as it was superceded by `validateRequest()`. It is still available for backward
   compatibility but is undocumented
 
+## 1.3.0
+> Released 14 Dec 2022
+
+- Bumped minimum node to v8.9
+- Upgraded dependencies to resolve vulnerabilities
+
 ## 1.2.3
 > Released 9 Jun 2021
 
