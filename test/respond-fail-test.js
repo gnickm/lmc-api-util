@@ -1,41 +1,44 @@
 // --------------------------------------------------------------------------
-// Copyright (C) 2016-2022 Nick Mitchell
-// MIT Licensed
+// Copyright (c) 2016-2023 Nick Mitchell - MIT Licensed
 // --------------------------------------------------------------------------
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-magic-numbers */
 'use strict';
 
-const express    = require('express');
-const request    = require('supertest');
-const HttpStatus = require('http-status-codes').StatusCodes;
-const expect     = require('chai').expect;
+const express = require('express');
+const request = require('supertest');
+const status  = require('http-status-codes').StatusCodes;
+const expect  = require('chai').expect;
 
-const api = require('../');
+const api    = require('..');
+const helper = require('./helper');
 
 // --------------------------------------------------------------------------
 
 var app = express();
 
-describe('lmc-api-util - makeFail() and children', function() {
-    describe('makeFail()', function() {
+describe('lmc-api-util - respondFail() and children', function() {
+    describe('respondFail()', function() {
         before(function() {
             app.get('/fail', function(req, res) {
                 if(req.query.resultobj) {
-                    api.makeFail(res, 'FAIL result with object', {foo: 'bar'});
+                    api.respondFail(res, 'FAIL result with object', {foo: 'bar'});
                 } else if(req.query.nomessage) {
-                    api.makeFail(res);
+                    api.respondFail(res);
                 } else {
-                    api.makeFail(res, 'FAIL result');
+                    api.respondFail(res, 'FAIL result');
                 }
             });
         });
+		it('should throw an error if passed something besides a result object', function() {
+			helper.expectErrorWithBadResultObject(api.respondFail);
+		});
         it('should return FAIL result with message', function(done) {
             request(app)
                 .get('/fail')
                 .set('Accept', 'application/json')
-                .expect(HttpStatus.OK)
+                .expect(status.OK)
                 .end(function(err, res) {
                     expect(err).to.be.null;
                     expect(res.body.result).to.equal('FAIL');
@@ -47,7 +50,7 @@ describe('lmc-api-util - makeFail() and children', function() {
             request(app)
                 .get('/fail?nomessage=true')
                 .set('Accept', 'application/json')
-                .expect(HttpStatus.OK)
+                .expect(status.OK)
                 .end(function(err, res) {
                     expect(err).to.be.null;
                     expect(res.body.result).to.equal('FAIL');
@@ -59,7 +62,7 @@ describe('lmc-api-util - makeFail() and children', function() {
             request(app)
                 .get('/fail?resultobj=true')
                 .set('Accept', 'application/json')
-                .expect(HttpStatus.OK)
+                .expect(status.OK)
                 .end(function(err, res) {
                     expect(err).to.be.null;
                     expect(res.body.result).to.equal('FAIL');
@@ -69,17 +72,20 @@ describe('lmc-api-util - makeFail() and children', function() {
                 });
         });
     });
-    describe('makeNotFound()', function() {
+    describe('respondNotFound()', function() {
         before(function() {
             app.get('/notfound', function(req, res) {
-                api.makeNotFound(res, 'Thing 123');
+                api.respondNotFound(res, 'Thing 123');
             });
         });
+		it('should throw an error if passed something besides a result object', function() {
+			helper.expectErrorWithBadResultObject(api.respondNotFound);
+		});
         it('should return Not Found (404) status with FAIL result', function(done) {
             request(app)
                 .get('/notfound')
                 .set('Accept', 'application/json')
-                .expect(HttpStatus.NOT_FOUND)
+                .expect(status.NOT_FOUND)
                 .end(function(err, res) {
                     expect(err).to.be.null;
                     expect(res.body.result).to.equal('FAIL');
@@ -88,17 +94,20 @@ describe('lmc-api-util - makeFail() and children', function() {
                 });
         });
     });
-    describe('makeBadRequest()', function() {
+    describe('respondBadRequest()', function() {
         before(function() {
             app.get('/badreq', function(req, res) {
-                api.makeBadRequest(res, 'Invalid Request');
+                api.respondBadRequest(res, 'Invalid Request');
             });
         });
+		it('should throw an error if passed something besides a result object', function() {
+			helper.expectErrorWithBadResultObject(api.respondBadRequest);
+		});
         it('should return Bad Request (400) status with FAIL result', function(done) {
             request(app)
                 .get('/badreq')
                 .set('Accept', 'application/json')
-                .expect(HttpStatus.BAD_REQUEST)
+                .expect(status.BAD_REQUEST)
                 .end(function(err, res) {
                     expect(err).to.be.null;
                     expect(res.body.result).to.equal('FAIL');
@@ -107,17 +116,20 @@ describe('lmc-api-util - makeFail() and children', function() {
                 });
         });
     });
-    describe('makeUnauthorized()', function() {
+    describe('respondUnauthorized()', function() {
         before(function() {
             app.get('/unauth', function(req, res) {
-                api.makeUnauthorized(res, 'Invalid credentials');
+                api.respondUnauthorized(res, 'Invalid credentials');
             });
         });
+		it('should throw an error if passed something besides a result object', function() {
+			helper.expectErrorWithBadResultObject(api.respondUnauthorized);
+		});
         it('should return Unauthorized (401) status with FAIL result', function(done) {
             request(app)
                 .get('/unauth')
                 .set('Accept', 'application/json')
-                .expect(HttpStatus.UNAUTHORIZED)
+                .expect(status.UNAUTHORIZED)
                 .end(function(err, res) {
                     expect(err).to.be.null;
                     expect(res.body.result).to.equal('FAIL');
@@ -126,17 +138,20 @@ describe('lmc-api-util - makeFail() and children', function() {
                 });
         });
     });
-    describe('makeForbidden()', function() {
+    describe('respondForbidden()', function() {
         before(function() {
             app.get('/forbid', function(req, res) {
-                api.makeForbidden(res, 'Thing 123');
+                api.respondForbidden(res, 'Thing 123');
             });
         });
+		it('should throw an error if passed something besides a result object', function() {
+			helper.expectErrorWithBadResultObject(api.respondForbidden);
+		});
         it('should return Forbidden (403) status with FAIL result', function(done) {
             request(app)
                 .get('/forbid')
                 .set('Accept', 'application/json')
-                .expect(HttpStatus.FORBIDDEN)
+                .expect(status.FORBIDDEN)
                 .end(function(err, res) {
                     expect(err).to.be.null;
                     expect(res.body.result).to.equal('FAIL');
@@ -145,17 +160,20 @@ describe('lmc-api-util - makeFail() and children', function() {
                 });
         });
     });
-    describe('makeServerError()', function() {
+    describe('respondServerError()', function() {
         before(function() {
             app.get('/servererror', function(req, res) {
-                api.makeServerError(res, 'Something exploded');
+                api.respondServerError(res, 'Something exploded');
             });
         });
+		it('should throw an error if passed something besides a result object', function() {
+			helper.expectErrorWithBadResultObject(api.respondServerError);
+		});
         it('should return 500 status with FAIL result', function(done) {
             request(app)
                 .get('/servererror')
                 .set('Accept', 'application/json')
-                .expect(HttpStatus.INTERNAL_SERVER_ERROR)
+                .expect(status.INTERNAL_SERVER_ERROR)
                 .end(function(err, res) {
                     expect(err).to.be.null;
                     expect(res.body.result).to.equal('FAIL');
