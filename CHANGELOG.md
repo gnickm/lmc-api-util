@@ -1,7 +1,7 @@
 # lmc-api-util Changelog
 
 ## 2.0.0
-> Released XX Aug 2021
+> Released 16 Jun 2021
 
 ### New
 - Added type checking of response object in `respond` functions, throwing an Error if it is not a valid `express` response object
