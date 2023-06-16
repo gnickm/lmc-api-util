@@ -349,7 +349,6 @@ that matches will be returned.
   list, checking against `attributes` and the matching value.
 
 
-
 ---
 #### pageObjects(allObjs, paging)
 
@@ -361,6 +360,38 @@ and sorting.
 
 - `allObjs` (required) - full array of objects to be paged
 - `paging` (required) - paging object generated from `calcPaging()`
+
+---
+#### searchObjects(allObjs, attributes, requestParams)
+
+Returns a subset of `allObjs` that match a case-insenitive search term defined
+in `requestParams`. If the key `search` exists in `requestParams` then each object
+in `allObjs` will be checked to see if any of the attributes as listed in
+`attributes` array contain the string defined in `search`. Any object
+that matches will be returned.
+
+- `allObjs` (required) - full array of objects to be searched
+- `attributes` (required) - array of attribute names to check on objects
+- `requestParams` (required) - object of parameters as part of the request.
+  Only the parameter `search` will be used to search the object list, checking
+  if any of the `attributes` contain the `search` string.
+
+---
+#### sortObjects(allObjs, attributes, requestParams)
+
+Returns a reordered array of `allObjs` based on parameters in `requestParams`.
+Any key in `requestParams` that starts with `sort|` and exists in the
+`attributes` array will be used to sort the objects. The value assigned in the
+`sort|` parameter should be `asc` or `desc` to specify ascending or descending order.
+In the case that you want to sort by multiple fields, you can append a number after the
+`asc` or `desc` to specify the application of the ordering.
+
+- `allObjs` (required) - full array of objects to be sorted
+- `attributes` (required) - array of attribute names to check on objects
+- `requestParams` (required) - object of parameters as part of the request.
+  Any parameter that starts with `sort|` will be used to sort the object
+  list, checking against `attributes` and using `asc` or `desc` in the
+  value to specify sort order.
 
 ---
 ## License
