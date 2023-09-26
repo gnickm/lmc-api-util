@@ -4,33 +4,33 @@
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-magic-numbers */
-'use strict';
+'use strict'
 
-const _      = require('lodash');
-const expect = require('chai').expect;
+const _ = require('lodash')
+const expect = require('chai').expect
 
 // --------------------------------------------------------------------------
 
-const expectErrorWithBadResultObject = function(func) {
-	expect(function() {
-		func();
-	}).to.throw(Error);
+const expectErrorWithBadResultObject = function (func) {
+  expect(function () {
+    func()
+  }).to.throw(Error)
 
-	expect(function() {
-		func(123);
-	}).to.throw(Error);
+  expect(function () {
+    func(123)
+  }).to.throw(Error)
 
-	expect(function() {
-		func('foo');
-	}).to.throw(Error);
+  expect(function () {
+    func('foo')
+  }).to.throw(Error)
 
-	expect(function() {
-		func(_.noop);
-	}).to.throw(Error);
+  expect(function () {
+    func(_.noop)
+  }).to.throw(Error)
 
-	expect(function() {
-		func({json: _.noop});
-	}).to.throw(Error);
-};
+  expect(function () {
+    func({ json: _.noop })
+  }).to.throw(Error)
+}
 
-module.exports.expectErrorWithBadResultObject = expectErrorWithBadResultObject;
+module.exports.expectErrorWithBadResultObject = expectErrorWithBadResultObject
