@@ -1,14 +1,14 @@
 # lmc-api-util Changelog
 
 ## 2.1.0
-> Released 16 Jun 2021
+> Released 26 Sep 2023
 
 ### Changed
 - Added support for deep object filtering and searching
 - Switched javascript syntax to standard
 
 ## 2.0.0
-> Released 16 Jun 2021
+> Released 16 Jun 2023
 
 ### New
 - Added type checking of response object in `respond` functions, throwing an Error if it is not a valid `express` response object
