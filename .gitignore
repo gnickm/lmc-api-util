@@ -39,3 +39,5 @@ jspm_packages
 # vim Swap Files
 *.swp
 
+.vscode
+npm up
