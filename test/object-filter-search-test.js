@@ -18,22 +18,22 @@ const chance = new Chance()
 /* eslint-disable object-property-newline */
 
 const TEST_OBJS = [
-  { id: 1, group: 1, order: 'b', feels: 'bad', bool: true, uniq: chance.string() },
-  { id: 2, group: 1, order: 'd', feels: 'bad', bool: 0, uniq: chance.string() },
-  { id: 3, group: '2', order: 'f', feels: 'bad', bool: 'true', uniq: chance.string() },
-  { id: 4, group: 2, order: 'a', feels: 'good', bool: 'false', uniq: chance.string() },
-  { id: 5, group: 3, order: 'c', feels: 'good', bool: 1, uniq: chance.string() },
-  { id: 6, group: '3', order: 'e', feels: 'good', bool: false, uniq: chance.string() }
+  { id: 1, group: 1, order: 'b', feels: 'bad', bool: true, uniq: chance.string(), obj: { val: 'a' } },
+  { id: 2, group: 1, order: 'd', feels: 'bad', bool: 0, uniq: chance.string(), obj: { val: 'b' } },
+  { id: 3, group: '2', order: 'f', feels: 'bad', bool: 'true', uniq: chance.string(), obj: { val: 'a' } },
+  { id: 4, group: 2, order: 'a', feels: 'good', bool: 'false', uniq: chance.string(), obj: { val: 'b' } },
+  { id: 5, group: 3, order: 'c', feels: 'good', bool: 1, uniq: chance.string(), obj: { val: 'a' } },
+  { id: 6, group: '3', order: 'e', feels: 'good', bool: false, uniq: chance.string(), obj: { val: 'b' } }
 ]
 
 /* eslint-enable object-property-newline */
 
-const TEST_ATTRS = ['id', 'group', 'order', 'feels', 'bool', 'uniq']
+const TEST_ATTRS = ['id', 'group', 'order', 'feels', 'bool', 'uniq', 'obj.val']
 
 describe('lmc-api-util - Object Filter & Search tests', function () {
   describe('filterObjects()', function () {
-    it('should return full list if empty query', function (done) {
-      const objs = api.filterObjects(TEST_OBJS, TEST_ATTRS, {})
+    it('should return full list if empty query and attributes', function (done) {
+      const objs = api.filterObjects(TEST_OBJS, null, {})
 
       expect(objs).to.have.lengthOf(6)
       done()
@@ -57,6 +57,16 @@ describe('lmc-api-util - Object Filter & Search tests', function () {
       })
 
       expect(objs).to.have.lengthOf(6)
+      done()
+    })
+    it('should apply filters if attributes list is empty', function (done) {
+      const objs = api.filterObjects(TEST_OBJS, null, {
+        'filter|foo': 1,
+        'filter|bar': 2,
+        'filter|baz': 'zip'
+      })
+
+      expect(objs).to.have.lengthOf(0)
       done()
     })
     it('should return filtered list for single filter', function (done) {
@@ -86,6 +96,22 @@ describe('lmc-api-util - Object Filter & Search tests', function () {
 
       objs = api.filterObjects(TEST_OBJS, TEST_ATTRS, { 'filter|bool': 'true' })
       expect(objs).to.have.lengthOf(3)
+
+      done()
+    })
+    it('should handle deep searches with and without attributes', function (done) {
+      let objs = api.filterObjects(TEST_OBJS, null, { 'filter|obj.val': 'a' })
+
+      expect(objs).to.have.lengthOf(3)
+      expect(objs[0].id).to.equal(1)
+      expect(objs[1].id).to.equal(3)
+      expect(objs[2].id).to.equal(5)
+
+      objs = api.filterObjects(TEST_OBJS, TEST_ATTRS, { 'filter|obj.val': 'b' })
+      expect(objs).to.have.lengthOf(3)
+      expect(objs[0].id).to.equal(2)
+      expect(objs[1].id).to.equal(4)
+      expect(objs[2].id).to.equal(6)
 
       done()
     })
@@ -131,6 +157,15 @@ describe('lmc-api-util - Object Filter & Search tests', function () {
       expect(objs[1].id).to.equal(2)
       expect(objs[2].id).to.equal(3)
       expect(objs[3].id).to.equal(4)
+      done()
+    })
+    it('should allow for deep searching', function (done) {
+      const objs = api.searchObjects(TEST_OBJS, ['obj.val'], { search: 'a' })
+
+      expect(objs).to.have.lengthOf(3)
+      expect(objs[0].id).to.equal(1)
+      expect(objs[1].id).to.equal(3)
+      expect(objs[2].id).to.equal(5)
       done()
     })
     it('should return empty list with search term with no matches', function (done) {

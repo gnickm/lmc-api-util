@@ -343,10 +343,11 @@ Any key in `requestParams` that starts with `filter|` and exists in the
 that matches will be returned.
 
 - `allObjs` (required) - full array of objects to be filtered
-- `attributes` (required) - array of attribute names to check on objects
+- `attributes` (optional) - array of attribute names to check on objects. If
+  null, will use any attribute associated with the objects
 - `requestParams` (required) - object of parameters as part of the request.
   Any parameter that starts with `filter|` will be used to filter the object
-  list, checking against `attributes` and the matching value.
+  list, checking against `attributes` and the matching value
 
 
 ---
@@ -368,7 +369,8 @@ Returns a subset of `allObjs` that match a case-insenitive search term defined
 in `requestParams`. If the key `search` exists in `requestParams` then each object
 in `allObjs` will be checked to see if any of the attributes as listed in
 `attributes` array contain the string defined in `search`. Any object
-that matches will be returned.
+that matches will be returned. `attributes` can be deep object paths, allowing
+for searches within subobjects.
 
 - `allObjs` (required) - full array of objects to be searched
 - `attributes` (required) - array of attribute names to check on objects

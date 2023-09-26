@@ -1,5 +1,12 @@
 # lmc-api-util Changelog
 
+## 2.1.0
+> Released 16 Jun 2021
+
+### Changed
+- Added support for deep object filtering and searching
+- Switched javascript syntax to standard
+
 ## 2.0.0
 > Released 16 Jun 2021
 
