@@ -1,6 +1,6 @@
 {
   "name": "lmc-api-util",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Stateless helper functions for implementing RESTful APIs in express",
   "main": "index.js",
   "scripts": {
@@ -27,14 +27,14 @@
     "chai": "^4.3.7",
     "chance": "^1.1.7",
     "coveralls": "^3.1.1",
+    "eslint": "^8.44.0",
+    "eslint-config-standard": "^17.1.0",
     "express": "^4.14.0",
     "mocha": "^10.2.0",
     "nyc": "^14.1.1",
     "supertest": "^3.0.0"
   },
   "dependencies": {
-    "eslint": "^8.44.0",
-    "eslint-config-standard": "^17.1.0",
     "http-status-codes": "^2.2.0",
     "lodash": "^4.16.4",
     "moment": "^2.29.4",
