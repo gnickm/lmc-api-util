@@ -18,12 +18,12 @@ const chance = new Chance()
 /* eslint-disable object-property-newline */
 
 const TEST_OBJS = [
-  { id: 1, group: 1, order: 'b', feels: 'bad', bool: true, uniq: chance.string(), obj: { val: 'a' } },
-  { id: 2, group: 1, order: 'd', feels: 'bad', bool: 0, uniq: chance.string(), obj: { val: 'b' } },
-  { id: 3, group: '2', order: 'f', feels: 'bad', bool: 'true', uniq: chance.string(), obj: { val: 'a' } },
-  { id: 4, group: 2, order: 'a', feels: 'good', bool: 'false', uniq: chance.string(), obj: { val: 'b' } },
-  { id: 5, group: 3, order: 'c', feels: 'good', bool: 1, uniq: chance.string(), obj: { val: 'a' } },
-  { id: 6, group: '3', order: 'e', feels: 'good', bool: false, uniq: chance.string(), obj: { val: 'b' } }
+  { id: 1, group: 1, order: 'b', feels: 'bad', bool: true, uniq: chance.string(), obj: { val: 'a', num: 1 } },
+  { id: 2, group: 1, order: 'd', feels: 'bad', bool: 0, uniq: chance.string(), obj: { val: 'b', num: '1' } },
+  { id: 3, group: '2', order: 'f', feels: 'bad', bool: 'true', uniq: chance.string(), obj: { val: 'a', num: 2 } },
+  { id: 4, group: 2, order: 'a', feels: 'good', bool: 'false', uniq: chance.string(), obj: { val: 'b', num: '2' } },
+  { id: 5, group: 3, order: 'c', feels: 'good', bool: 1, uniq: chance.string(), obj: { val: 'a', num: 3 } },
+  { id: 6, group: '3', order: 'e', feels: 'good', bool: false, uniq: chance.string(), obj: { val: 'b', num : '3' } }
 ]
 
 /* eslint-enable object-property-newline */
@@ -112,6 +112,20 @@ describe('lmc-api-util - Object Filter & Search tests', function () {
       expect(objs[0].id).to.equal(2)
       expect(objs[1].id).to.equal(4)
       expect(objs[2].id).to.equal(6)
+
+      done()
+    })
+    it('should handle deep searches of numbers as both strings and integres', function (done) {
+      let objs = api.filterObjects(TEST_OBJS, null, { 'filter|obj.num': 1 })
+
+      expect(objs).to.have.lengthOf(2)
+      expect(objs[0].id).to.equal(1)
+      expect(objs[1].id).to.equal(2)
+
+      objs = api.filterObjects(TEST_OBJS, null, { 'filter|obj.num': '2' })
+      expect(objs).to.have.lengthOf(2)
+      expect(objs[0].id).to.equal(3)
+      expect(objs[1].id).to.equal(4)
 
       done()
     })
