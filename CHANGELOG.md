@@ -1,10 +1,14 @@
 # lmc-api-util Changelog
 
 ## 2.1.1
-> Released 1 Jul 2024
+> Released 2 Jul 2024
+
+### Added
+- Added a few tests for specific coverage
 
 ### Changed
 - Moved eslint stuff to dev dependencies
+- Updated project dependencies
 
 ## 2.1.0
 > Released 26 Sep 2023
