@@ -1,5 +1,11 @@
 # lmc-api-util Changelog
 
+## 2.1.2
+> Released XX XXX 2024
+
+### Changed
+- Updated project dependencies
+
 ## 2.1.1
 > Released 2 Jul 2024
 

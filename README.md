@@ -1,4 +1,4 @@
-# lmc-api-util [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coveralls Status][coveralls-image]][coveralls-url]
+# lmc-api-util [![NPM version][npm-image]][npm-url] [![Coveralls Status][coveralls-image]][coveralls-url]
 > Stateless helper functions for implementing RESTful APIs in express
 
 ## Usage
@@ -402,9 +402,6 @@ In the case that you want to sort by multiple fields, you can append a number af
 
 [npm-url]: https://npmjs.org/package/lmc-api-util
 [npm-image]: http://img.shields.io/npm/v/lmc-api-util.svg
-
-[travis-url]: https://travis-ci.com/gnickm/lmc-api-util
-[travis-image]: http://img.shields.io/travis/gnickm/lmc-api-util.svg
 
 [coveralls-url]: https://coveralls.io/github/gnickm/lmc-api-util?branch=master
 [coveralls-image]: https://coveralls.io/repos/github/gnickm/lmc-api-util/badge.svg?branch=master
